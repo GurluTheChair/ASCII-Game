@@ -3,6 +3,12 @@
 
 class idMusicNote {
 	public :
+		enum state_t {
+			ACTIVE,
+			PRESSED,
+			MISSED,
+			INACTIVE
+		};
 		int column;
 		float startSeconds;
 		float endSeconds;
