@@ -128,6 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ASCII_Game.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="MusicNote.cpp" />
+    <ClCompile Include="ViewManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="MusicNote.h" />
+    <ClInclude Include="NYTimer.h" />
+    <ClInclude Include="ViewManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

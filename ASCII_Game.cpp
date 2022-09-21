@@ -1,7 +1,6 @@
-#include "ViewManager.h"
-
 #include <windows.h>
-#include <stdlib.h>
+
+#include "ViewManager.h"
 
 using namespace std;
 
@@ -10,10 +9,14 @@ COORD dwBufferCoord = { 0, 0 };
 SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
 int main(void) {
-	idViewManager view(dwBufferSize, dwBufferCoord, rcRegion);
+	HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	idViewManager view(stdoutHandle, dwBufferSize, dwBufferCoord, rcRegion);
+
 	view.HideCursor();
 	while (true) {
-		view.DrawRectangle();
+		// TODO: draw rectangle to check whether code works
+		// view.DrawRectangle();
+		
 		/*
 		Fall();
 		PrintGame();

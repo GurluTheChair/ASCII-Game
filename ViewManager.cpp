@@ -3,26 +3,22 @@
 #include "ViewManager.h"
 
 idViewManager::idViewManager(
-	const HANDLE& outputHandle, 
-	const COORD& dwBufferSize, 
-	const COORD& dwBufferCoord, 
-	const SMALL_RECT& rcRegion)
-	: outputHandle(outputHandle)
-	, dwBufferSize(dwBufferSize)
-	, dwBufferCoord(dwBufferCoord)
-	, rcRegion(rcRegion)
-	, buffer()
-{
-	ReadConsoleOutput(outputHandle, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, rcRegion);
-
+	const HANDLE& _outputHandle, 
+	const COORD& _dwBufferSize, 
+	const COORD& _dwBufferCoord, 
+	const SMALL_RECT& _rcRegion)
+	: outputHandle(_outputHandle)
+	, dwBufferSize(_dwBufferSize)
+	, dwBufferCoord(_dwBufferCoord)
+	, rcRegion(_rcRegion) {
+	ReadConsoleOutput(outputHandle, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
 }
 
 void idViewManager::HideCursor() const {
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO info;
 	info.dwSize = 100;
 	info.bVisible = FALSE;
-	SetConsoleCursorInfo(consoleHandle, &info);
+	SetConsoleCursorInfo(outputHandle, &info);
 }
 
 CHAR_INFO idViewManager::GetCharInfo(const u_char displayValue, const WORD bgColor, const WORD fgColor) const {
@@ -46,10 +42,10 @@ CHAR_INFO idViewManager::GetCharInfo(const u_char displayValue, const WORD bgCol
 }
 
 void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, const WORD bgColor, const WORD fgColor) {
-	int bottomY = ((int)(rectangle.origin_y));
-	int topY = ((int)(rectangle.origin_y - rectangle.height));
+	int bottomY = int(rectangle.origin_y);
+	int topY = int(rectangle.origin_y - rectangle.height);
 
-	int displayValue = (rectangle.origin_y - bottomY) * 8;
+	int displayValue = int((rectangle.origin_y - bottomY) * 8);
 	CHAR_INFO bottomChar = GetCharInfo(displayValue, bgColor, fgColor);
 	for (size_t i = 0; i < rectangle.width; i++) {
 		buffer[bottomY][rectangle.origin_x+i] = bottomChar;
@@ -62,13 +58,13 @@ void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, c
 		}
 	}
 
-	displayValue = ((rectangle.origin_y - rectangle.height) - bottomY) * 8;
+	displayValue = int(((rectangle.origin_y - rectangle.height) - bottomY) * 8);
 	CHAR_INFO topChar = GetCharInfo(displayValue, bgColor, fgColor);
 	for (size_t i = 0; i < rectangle.width; i++) {
 		buffer[topY][rectangle.origin_x+i] = topChar;
 	}
 }
 
-void idViewManager::Refresh() const {
-	WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
+void idViewManager::Refresh() {
+	WriteConsoleOutput(outputHandle, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
 }
