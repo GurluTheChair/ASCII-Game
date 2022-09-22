@@ -4,7 +4,7 @@
 // Width of the screen
 #define SCREEN_WIDTH 83
 // Height of the screen
-#define SCREEN_HEIGHT 37
+#define SCREEN_HEIGHT 17
 
 // Number of characters per lane
 #define LANE_WIDTH 7
@@ -31,6 +31,7 @@ class idViewManager {
 		void HideCursor() const;
 		CHAR_INFO GetCharInfo(const u_char displayValue, const WORD bgColor, const WORD fgColor) const;
 		void DrawRectangle(const rectangle_t& rectangle, const WORD bgColor, const WORD fgColor);
+		void Clear();
 		void Refresh();
 	private:
 		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];

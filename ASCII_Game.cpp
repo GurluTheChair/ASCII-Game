@@ -13,19 +13,13 @@ int main(void) {
 	idViewManager view(stdoutHandle, dwBufferSize, dwBufferCoord, rcRegion);
 
 	view.HideCursor();
+	float position = 3;
 	while (true) {
-		// TODO: draw rectangle to check whether code works
-		// view.DrawRectangle();
-		
-		/*
-		Fall();
-		PrintGame();
-		if (displayValues[0][5] == 0) {
-			Spawn(5, 1);
-			Spawn(15, 5);
-		}
-		Sleep(2);
-		*/
+		view.Clear();
+		view.DrawRectangle(idViewManager::rectangle_t{5,position,LANE_WIDTH,10}, 0x000F, 0x0000);
+		view.Refresh();
+		position += 0.15;
+		Sleep(1);
 	}
 	return 0;
 }
