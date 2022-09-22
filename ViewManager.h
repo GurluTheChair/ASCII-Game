@@ -2,12 +2,14 @@
 #define __VIEW_MANAGER__
 
 // Width of the screen
-#define SCREEN_WIDTH 83
+#define SCREEN_WIDTH 50
 // Height of the screen
-#define SCREEN_HEIGHT 17
+#define SCREEN_HEIGHT 36
 
 // Number of characters per lane
 #define LANE_WIDTH 7
+// Number of characters per lane
+#define LANE_HEIGHT 35
 
 // Color of the background
 #define BACKGROUND_COLOR 0x0000
@@ -33,6 +35,7 @@ class idViewManager {
 		void DrawRectangle(const rectangle_t& rectangle, const WORD bgColor, const WORD fgColor);
 		void Clear();
 		void Refresh();
+		void DrawBoard();
 	private:
 		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 		HANDLE outputHandle;
