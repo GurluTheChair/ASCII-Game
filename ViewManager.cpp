@@ -48,8 +48,7 @@ void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, c
 	int bottomY = floor(rectangle.origin_y);
 	int topY = floor(rectangle.origin_y - (rectangle.height));
 
-	if (bottomY > 0 && bottomY < LANE_HEIGHT) {
-		lround((rectangle.origin_y - bottomY) * 7);
+	if (bottomY >= 0 && bottomY < LANE_HEIGHT) {
 		int displayValue = lround((rectangle.origin_y - bottomY) * 7);
 		CHAR_INFO bottomChar = GetCharInfo(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rectangle.width; i++) {
@@ -89,7 +88,7 @@ void idViewManager::Refresh() {
 void idViewManager::DrawBoard() {
 	CHAR_INFO line;
 	line.Char.UnicodeChar = ' ';
-	line.Attributes = 0x0001 | 0x0001 | COMMON_LVB_REVERSE_VIDEO;
+	line.Attributes = 0x0010;
 	for (size_t i = 0; i < SCREEN_WIDTH; i++) {
 		buffer[SCREEN_HEIGHT -1][i] = line;
 	}

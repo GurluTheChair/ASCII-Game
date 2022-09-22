@@ -18,7 +18,7 @@
 // Color of a note being pressed
 #define PRESSED_COLOR 0x000F
 // Color of a note that was missed
-#define MISSED_COLOR 0x0004
+#define MISSED_COLOR 0x0008
 
 class idViewManager {
 	public:
