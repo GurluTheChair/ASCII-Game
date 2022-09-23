@@ -9,10 +9,19 @@ class idMusicNote {
 			MISSED,
 			INACTIVE
 		};
+
+		friend std::istream& operator>>(std::istream& is, idMusicNote& note);
+
 		int column;
 		float startSeconds;
 		float endSeconds;
-		friend std::istream& operator>>(std::istream& is, idMusicNote& note);
+		state_t state;
+
+		idMusicNote() = default;
+		idMusicNote(int _column, float _startSeconds, float _endSeconds, state_t _state = INACTIVE);
+
+		bool operator<(const idMusicNote& other);
+		bool operator>(const idMusicNote& other);
 };
 
 #endif
