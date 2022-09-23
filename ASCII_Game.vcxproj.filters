@@ -27,6 +27,12 @@
     <ClCompile Include="ViewManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="GameLevel.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputManager.h">
@@ -39,6 +45,12 @@
       <Filter>Fichiers sources</Filter>
     </ClInclude>
     <ClInclude Include="ViewManager.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLevel.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
   </ItemGroup>
