@@ -68,27 +68,30 @@ void idGameManager::UpdateGame() {
 }
 
 void idGameManager::UpdateGameData() {
+	// # Input Management
+	// TODO : make improvements to make the game more generous and/or precise
 	currentLevel.UpdateNotesActiveState(timeSinceStart);
 	
 	int laneKeys[4] = { 'A', 'Z', 'E', 'R' };
 	idMusicNote* bottomNotes[4];
 	currentLevel.GetBottomNotes(bottomNotes);
 
-	return;
-
+	const float pressEarlyTolerance = 0.05f;
+	const float pressLateTolerance = 0.05f;
+	const float releaseEarlyTolerance = 0.05f;
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 	{
 		if ((bottomNotes[i] != nullptr) && 
 			(bottomNotes[i]->state != idMusicNote::state_t::MISSED)) {
-
 			if (input.WasKeyHeld(laneKeys[i])) {
-				// TODO : deal with too early presses (acceptable and way too early)
-				if (bottomNotes[i]->startSeconds >= timeSinceStart) {
+				if ((timeSinceStart >= bottomNotes[i]->startSeconds - pressEarlyTolerance) &&
+					(timeSinceStart <= bottomNotes[i]->startSeconds + pressLateTolerance)) {
 					bottomNotes[i]->state = idMusicNote::state_t::PRESSED;
+				} else {
+					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
 				}
 			} else {
-				// TODO : deal with late presses (acceptable)
-				if (bottomNotes[i]->startSeconds >= timeSinceStart) {
+				if (timeSinceStart > bottomNotes[i]->startSeconds + pressLateTolerance) {
 					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
 				}
 			}
