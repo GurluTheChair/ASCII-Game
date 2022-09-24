@@ -1,34 +1,142 @@
-#include <istream>
 #include <string>
 #include <vector>
 #include <deque>
 #include <unordered_map>
 #include <windows.h>
 
+#include "NYTimer.h"
 #include "MusicNote.h"
 #include "GameLevel.h"
 #include "InputManager.h"
 #include "ViewManager.h"
 #include "GameManager.h"
 
-bool idGameManager::InitGame(const std::string& levelFilename) {
-	currentLevel.LoadFile(levelFilename);
+#include <iostream>
 
-	return false; // TODO: replace with actual value
+idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, const float _frameRate)
+: input(_input)
+, view(_view)
+, frameRate(_frameRate)
+, deltaTime(0.0f)
+, timeSinceStart(0.0f)
+{ }
+
+bool idGameManager::InitGame(const std::string& levelFilename) {
+	bool loadingWorked = currentLevel.LoadFile(levelFilename);
+
+	input.RegisterKey('A');
+	input.RegisterKey('Z');
+	input.RegisterKey('E');
+	input.RegisterKey('R');
+
+	return loadingWorked;
 }
 
-void idGameManager::StartMainLoop() {
+void idGameManager::StartGame() {
+	NYTimer timer;
+	timer.start();
+	float startTime = timer.getElapsedSeconds();
+	
+	const float& songLength = currentLevel.GetLengthSeconds();
+	const float delayBetweenFrames = 1.0f / frameRate;
 
+	timeSinceStart = 0.0f;
+	UpdateGame();
+	float previousUpdateTime = startTime;
+	float currentLoopTime;
+
+	while (timeSinceStart < songLength) {
+		input.UpdateKeyStates();
+		currentLoopTime = timer.getElapsedSeconds();
+
+		if (currentLoopTime > (previousUpdateTime + delayBetweenFrames)) {
+			timeSinceStart = currentLoopTime - startTime;
+			deltaTime = currentLoopTime - previousUpdateTime;
+
+			UpdateGame();
+			input.ResetKeyStates();
+
+			previousUpdateTime = currentLoopTime;
+		}
+		Sleep(1);
+	}
 }
 
 void idGameManager::UpdateGame() {
-	
+	UpdateGameData();
+	UpdateGameView();
 }
 
 void idGameManager::UpdateGameData() {
-	// TODO : update data according to time
+	currentLevel.UpdateNotesActiveState(timeSinceStart);
+	
+	int laneKeys[4] = { 'A', 'Z', 'E', 'R' };
+	idMusicNote* bottomNotes[4];
+	currentLevel.GetBottomNotes(bottomNotes);
+
+	return;
+
+	for (int i = 0; i < GAME_LANE_COUNT; ++i)
+	{
+		if ((bottomNotes[i] != nullptr) && 
+			(bottomNotes[i]->state != idMusicNote::state_t::MISSED)) {
+
+			if (input.WasKeyHeld(laneKeys[i])) {
+				// TODO : deal with too early presses (acceptable and way too early)
+				if (bottomNotes[i]->startSeconds >= timeSinceStart) {
+					bottomNotes[i]->state = idMusicNote::state_t::PRESSED;
+				}
+			} else {
+				// TODO : deal with late presses (acceptable)
+				if (bottomNotes[i]->startSeconds >= timeSinceStart) {
+					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
+				}
+			}
+		}
+	}
 }
 
 void idGameManager::UpdateGameView() {
-	// TODO : display current state of the game
+	// TODO : replace hard-coded values with variables/constants
+
+	view.Clear();
+
+	idViewManager::rectangle_t rectangle;
+	WORD noteColor = 0x0000;
+	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
+	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
+		const std::deque<idMusicNote> &laneNotes = currentLevel.GetActiveNotes(lane);
+
+		for (int i = 0; i < laneNotes.size(); ++i) {
+			const idMusicNote& note = laneNotes[i];
+
+			rectangle.origin_x = lane * LANE_WIDTH;
+			rectangle.origin_y = LANE_HEIGHT * (1 + ((timeSinceStart - note.startSeconds) / laneLengthSeconds));
+			rectangle.width = LANE_WIDTH;
+			rectangle.height = LANE_HEIGHT * ((note.endSeconds - note.startSeconds) / laneLengthSeconds);
+
+			if (rectangle.origin_y > 3) {
+				if (true);
+			}
+
+			switch (note.state) {
+				case idMusicNote::state_t::ACTIVE:
+					noteColor = 0x000F;
+					break;
+				case idMusicNote::state_t::PRESSED:
+					noteColor = 0x000E;
+					break;
+				case idMusicNote::state_t::MISSED:
+					noteColor = 0x0008;
+					break;
+				default:
+					break;
+			}
+
+			view.DrawRectangle(rectangle, BACKGROUND_COLOR, noteColor);
+		}
+	}
+
+	view.DrawBoard();
+	view.Refresh();
 }
