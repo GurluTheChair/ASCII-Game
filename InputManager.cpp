@@ -8,6 +8,13 @@ void idInputManager::ResetKeyState(const int virtualKey) {
 	short keyState = keyStates[virtualKey]; // State defined by ourselves
 
 	if (windowsKeyState & 0x8000) { // Key Being Pressed
+		if (keyState & KEY_UP_BIT) {
+			keyState |= KEY_PRESSED_BIT;
+		}
+		else {
+			keyState &= ~KEY_PRESSED_BIT;
+		}
+
 		keyState |= KEY_HELD_BIT;
 		keyState |= KEY_DOWN_BIT;
 		keyState &= ~KEY_RELEASED_BIT;
@@ -22,6 +29,7 @@ void idInputManager::ResetKeyState(const int virtualKey) {
 		keyState |= KEY_UP_BIT;
 		keyState &= ~KEY_DOWN_BIT;
 		keyState &= ~KEY_HELD_BIT;
+		keyState &= ~KEY_PRESSED_BIT;
 	}
 
 	keyStates[virtualKey] = keyState;
@@ -45,10 +53,13 @@ void idInputManager::UpdateKeyStates() {
 
 		if (windowsKeyState & 0x8000) { // Key Being Pressed
 			keyState |= KEY_DOWN_BIT;
-			keyState &= ~KEY_UP_BIT;
+			if (keyState & KEY_UP_BIT) {
+				keyState |= KEY_PRESSED_BIT;
+			}
 			if (!(keyState & KEY_RELEASED_BIT)) { // We don't allow released keys to be "held"
 				keyState |= KEY_HELD_BIT;
 			}
+			keyState &= ~KEY_UP_BIT;
 		} else { // Key Not Being Pressed
 			keyState |= KEY_UP_BIT;
 			if (keyState & KEY_DOWN_BIT) {
@@ -62,10 +73,14 @@ void idInputManager::UpdateKeyStates() {
 	}
 }
 
+bool idInputManager::WasKeyHeld(const int virtualKey) const {
+	return keyStates.at(virtualKey) & KEY_HELD_BIT;
+}
+
 bool idInputManager::WasKeyReleased(const int virtualKey) const {
 	return keyStates.at(virtualKey) & KEY_RELEASED_BIT;
 }
 
-bool idInputManager::WasKeyHeld(const int virtualKey) const {
-	return keyStates.at(virtualKey) & KEY_HELD_BIT;
+bool idInputManager::WasKeyPressed(const int virtualKey) const {
+	return keyStates.at(virtualKey) & KEY_PRESSED_BIT;
 }
