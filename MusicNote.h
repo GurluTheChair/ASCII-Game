@@ -3,11 +3,10 @@
 
 class idMusicNote {
 	public :
-		enum state_t {
+		enum class state_t {
 			ACTIVE,
 			PRESSED,
-			MISSED,
-			INACTIVE
+			MISSED
 		};
 		friend std::istream& operator>>(std::istream& is, idMusicNote& note);
 
@@ -17,7 +16,7 @@ class idMusicNote {
 		state_t state;
 
 		idMusicNote() = default;
-		idMusicNote(int _column, float _startSeconds, float _endSeconds, state_t _state = INACTIVE);
+		idMusicNote(int _column, float _startSeconds, float _endSeconds, state_t _state = state_t::ACTIVE);
 };
 
 #endif

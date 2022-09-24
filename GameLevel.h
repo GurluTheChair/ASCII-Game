@@ -6,10 +6,17 @@
 class idGameLevel {
 	public:
 		idGameLevel() = default;
+		
 		bool LoadFile(const std::string& levelFilename);
+		void UpdateNotesActiveState(const float time);
+
 		const std::deque<idMusicNote>& GetActiveNotes(const unsigned int lane) const;
 		void GetBottomNotes(idMusicNote **output);
 
+		const std::string& GetSongName() const;
+		const std::string& GetSongFilename() const;
+		const float& GetLengthSeconds() const;
+		const float& GetLaneLengthSeconds() const;
 	private:
 		std::string songName;
 		std::string songFilename;
@@ -17,8 +24,6 @@ class idGameLevel {
 		float laneLengthSeconds;
 		std::vector<idMusicNote> unplayedNotes;
 		std::deque<idMusicNote> activeNotes[GAME_LANE_COUNT];
-
-		void UpdateNotesActiveState(const float time);
 };
 
 #endif

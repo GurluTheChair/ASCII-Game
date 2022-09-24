@@ -11,7 +11,7 @@
 #define EXTRACT_LINE_WITH_FAIL_RETURN(istream, string) if (!std::getline(istream, string)) { return false; }
 #define EXTRACT_WITH_FAIL_RETURN(istream, variable) if (!(istream >> variable)) { return false; }
 
-static bool Later(const idMusicNote & left, const const idMusicNote & right) {
+static bool Later(const idMusicNote & left, const idMusicNote & right) {
 	return left.startSeconds > right.startSeconds;
 }
 
@@ -45,6 +45,27 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 	return !levelFile.fail();
 }
 
+void idGameLevel::UpdateNotesActiveState(const float time) {
+	for (int i = 0; i < GAME_LANE_COUNT; i++) {
+		while ((activeNotes[i].size() > 0) && (time > activeNotes[i].front().endSeconds)) {
+			activeNotes[i].pop_front();
+		}
+	}
+
+	if (unplayedNotes.size() > 0) {
+		idMusicNote nextNote = unplayedNotes.back();
+		while (nextNote.startSeconds >= (time - laneLengthSeconds)) {
+			activeNotes[nextNote.column].push_back(nextNote);
+			unplayedNotes.pop_back();
+
+			if (unplayedNotes.size() > 0)
+				nextNote = unplayedNotes.back();
+			else
+				break;
+		};
+	}
+}
+
 const std::deque<idMusicNote>& idGameLevel::GetActiveNotes(const unsigned int lane) const {
 	return activeNotes[lane];
 }
@@ -58,17 +79,18 @@ void idGameLevel::GetBottomNotes(idMusicNote** output) {
 	}
 }
 
-void idGameLevel::UpdateNotesActiveState(const float time) {
-	for (int i = 0; i < GAME_LANE_COUNT; i++) {
-		while (time > activeNotes[i].front().endSeconds) {
-			activeNotes[i].pop_front();
-		}
-	}
+const std::string& idGameLevel::GetSongName() const {
+	return songName;
+}
 
-	idMusicNote nextNote = unplayedNotes.back();
-	while (nextNote.startSeconds <= time) {
-		activeNotes[nextNote.column].push_back(nextNote);
-		unplayedNotes.pop_back();
-		nextNote = unplayedNotes.back();
-	};
+const std::string& idGameLevel::GetSongFilename() const {
+	return songFilename;
+}
+
+const float& idGameLevel::GetLengthSeconds() const {
+	return lengthSeconds;
+}
+
+const float& idGameLevel::GetLaneLengthSeconds() const {
+	return laneLengthSeconds;
 }

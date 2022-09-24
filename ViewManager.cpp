@@ -8,10 +8,10 @@ idViewManager::idViewManager(
 	const COORD& _dwBufferSize, 
 	const COORD& _dwBufferCoord, 
 	const SMALL_RECT& _rcRegion)
-	: outputHandle(_outputHandle)
-	, dwBufferSize(_dwBufferSize)
-	, dwBufferCoord(_dwBufferCoord)
-	, rcRegion(_rcRegion) {
+: outputHandle(_outputHandle)
+, dwBufferSize(_dwBufferSize)
+, dwBufferCoord(_dwBufferCoord)
+, rcRegion(_rcRegion) {
 	SetConsoleScreenBufferSize(outputHandle, dwBufferSize);
 	SetConsoleWindowInfo(outputHandle, true, &rcRegion);
 	ReadConsoleOutput(outputHandle, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
@@ -45,8 +45,8 @@ CHAR_INFO idViewManager::GetCharInfo(const u_char displayValue, const WORD bgCol
 }
 
 void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, const WORD bgColor, const WORD fgColor) {
-	int bottomY = floor(rectangle.origin_y);
-	int topY = floor(rectangle.origin_y - (rectangle.height));
+	int bottomY = int(floor(rectangle.origin_y));
+	int topY = int(floor(rectangle.origin_y - rectangle.height));
 
 	if (bottomY >= 0 && bottomY < LANE_HEIGHT) {
 		int displayValue = lround((rectangle.origin_y - bottomY) * 7);
@@ -64,7 +64,7 @@ void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, c
 	}
 
 	if (topY >= 0 && topY < LANE_HEIGHT) {
-		int displayValue = lround(((rectangle.origin_y - rectangle.height) - topY) * 7) + 8;
+		int displayValue = lround((rectangle.origin_y - rectangle.height - topY) * 7) + 8;
 		CHAR_INFO topChar = GetCharInfo(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rectangle.width; i++) {
 			buffer[topY][rectangle.origin_x + i] = topChar;
