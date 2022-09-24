@@ -8,11 +8,13 @@
 #include "MusicNote.h"
 #include "GameLevel.h"
 #include "InputManager.h"
-#include "GameManager.h"
 #include "ViewManager.h"
+#include "GameManager.h"
 
 bool idGameManager::InitGame(const std::string& levelFilename) {
 	currentLevel.LoadFile(levelFilename);
+
+	return false; // TODO: replace with actual value
 }
 
 void idGameManager::StartMainLoop() {

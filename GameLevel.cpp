@@ -11,6 +11,10 @@
 #define EXTRACT_LINE_WITH_FAIL_RETURN(istream, string) if (!std::getline(istream, string)) { return false; }
 #define EXTRACT_WITH_FAIL_RETURN(istream, variable) if (!(istream >> variable)) { return false; }
 
+static bool Later(const idMusicNote & left, const const idMusicNote & right) {
+	return left.startSeconds > right.startSeconds;
+}
+
 bool idGameLevel::LoadFile(const std::string& levelFilename) {
 	std::ifstream levelFile(levelFilename);
 
@@ -33,11 +37,12 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 	while (!levelFile.eof()) {
 		EXTRACT_WITH_FAIL_RETURN(levelFile, note)
 		unplayedNotes.push_back(note);
+		levelFile >> std::ws;
 	}
 	// Sort notes in descending order
-	std::sort(unplayedNotes.begin(), unplayedNotes.end(), std::greater<idMusicNote>());
+	std::sort(unplayedNotes.begin(), unplayedNotes.end(), Later);
 
-	return levelFile.fail();
+	return !levelFile.fail();
 }
 
 const std::deque<idMusicNote>& idGameLevel::GetActiveNotes(const unsigned int lane) const {
