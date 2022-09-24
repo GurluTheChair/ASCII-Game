@@ -19,6 +19,8 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, const
 , frameRate(_frameRate)
 , deltaTime(0.0f)
 , timeSinceStart(0.0f)
+, comboCount(0)
+, score(0)
 { }
 
 bool idGameManager::InitGame(const std::string& levelFilename) {
@@ -41,6 +43,9 @@ void idGameManager::StartGame() {
 	const float delayBetweenFrames = 1.0f / frameRate;
 
 	timeSinceStart = 0.0f;
+	comboCount = 0;
+	score = 0;
+
 	UpdateGame();
 	float previousUpdateTime = startTime;
 	float currentLoopTime;
@@ -97,6 +102,19 @@ void idGameManager::UpdateGameData() {
 			}
 		}
 	}
+
+	// # Score Management
+	const std::vector<idMusicNote>& playedNotes = currentLevel.GetPlayedNotes();
+	for (int i = 0; i < playedNotes.size(); ++i) {
+		const idMusicNote& note = playedNotes[i];
+		if (note.state == idMusicNote::state_t::ACTIVE) {
+			comboCount++;
+			score += int(comboCount * (note.endSeconds - note.startSeconds) * 100);
+		} else {
+			comboCount = 0;
+		}
+	}
+	currentLevel.ClearPlayedNotes();
 }
 
 void idGameManager::UpdateGameView() {
@@ -117,10 +135,6 @@ void idGameManager::UpdateGameView() {
 			rectangle.origin_y = LANE_HEIGHT * (1 + ((timeSinceStart - note.startSeconds) / laneLengthSeconds));
 			rectangle.width = LANE_WIDTH;
 			rectangle.height = LANE_HEIGHT * ((note.endSeconds - note.startSeconds) / laneLengthSeconds);
-
-			if (rectangle.origin_y > 3) {
-				if (true);
-			}
 
 			switch (note.state) {
 				case idMusicNote::state_t::ACTIVE:

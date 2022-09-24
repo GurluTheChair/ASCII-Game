@@ -11,8 +11,12 @@
 #define EXTRACT_LINE_WITH_FAIL_RETURN(istream, string) if (!std::getline(istream, string)) { return false; }
 #define EXTRACT_WITH_FAIL_RETURN(istream, variable) if (!(istream >> variable)) { return false; }
 
-static bool Later(const idMusicNote & left, const idMusicNote & right) {
+static bool HighestStartSeconds(const idMusicNote & left, const idMusicNote & right) {
 	return left.startSeconds > right.startSeconds;
+}
+
+static bool LowestEndSeconds(const idMusicNote& left, const idMusicNote& right) {
+	return left.endSeconds < right.endSeconds;
 }
 
 bool idGameLevel::LoadFile(const std::string& levelFilename) {
@@ -28,6 +32,7 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 
 	// Clear previously loaded notes (if any)
 	unplayedNotes.clear();
+	playedNotes.clear();
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 		activeNotes[i].clear();
 
@@ -40,7 +45,7 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 		levelFile >> std::ws;
 	}
 	// Sort notes in descending order
-	std::sort(unplayedNotes.begin(), unplayedNotes.end(), Later);
+	std::sort(unplayedNotes.begin(), unplayedNotes.end(), HighestStartSeconds);
 
 	return !levelFile.fail();
 }
@@ -48,6 +53,7 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 void idGameLevel::UpdateNotesActiveState(const float time) {
 	for (int i = 0; i < GAME_LANE_COUNT; i++) {
 		while ((activeNotes[i].size() > 0) && (time > activeNotes[i].front().endSeconds)) {
+			playedNotes.push_back(activeNotes[i].front());
 			activeNotes[i].pop_front();
 		}
 	}
@@ -64,6 +70,10 @@ void idGameLevel::UpdateNotesActiveState(const float time) {
 				break;
 		};
 	}
+
+	if (playedNotes.size() > 1) {
+		std::sort(playedNotes.begin(), playedNotes.end(), LowestEndSeconds);
+	}
 }
 
 const std::deque<idMusicNote>& idGameLevel::GetActiveNotes(const unsigned int lane) const {
@@ -77,6 +87,14 @@ void idGameLevel::GetBottomNotes(idMusicNote** output) {
 		else
 			output[i] = nullptr;
 	}
+}
+
+const std::vector<idMusicNote>& idGameLevel::GetPlayedNotes() const {
+	return playedNotes;
+}
+
+void idGameLevel::ClearPlayedNotes() {
+	playedNotes.clear();
 }
 
 const std::string& idGameLevel::GetSongName() const {

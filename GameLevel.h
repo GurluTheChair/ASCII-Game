@@ -12,6 +12,8 @@ class idGameLevel {
 
 		const std::deque<idMusicNote>& GetActiveNotes(const unsigned int lane) const;
 		void GetBottomNotes(idMusicNote **output);
+		const std::vector<idMusicNote>& GetPlayedNotes() const;
+		void ClearPlayedNotes();
 
 		const std::string& GetSongName() const;
 		const std::string& GetSongFilename() const;
@@ -24,6 +26,7 @@ class idGameLevel {
 		float laneLengthSeconds;
 		std::vector<idMusicNote> unplayedNotes;
 		std::deque<idMusicNote> activeNotes[GAME_LANE_COUNT];
+		std::vector<idMusicNote> playedNotes;
 };
 
 #endif
