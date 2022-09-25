@@ -16,6 +16,7 @@ class idGameManager {
 		float deltaTime;
 		const float frameRate;
 		unsigned int comboCount;
+		unsigned int missedNotes;
 		unsigned int score;
 		void UpdateGameData();
 		void UpdateGameView();

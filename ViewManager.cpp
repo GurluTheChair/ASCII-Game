@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <cmath>
+#include <string>
 
 #include "ViewManager.h"
 
@@ -89,7 +90,70 @@ void idViewManager::DrawBoard() {
 	CHAR_INFO line;
 	line.Char.UnicodeChar = ' ';
 	line.Attributes = 0x0010;
+
 	for (size_t i = 0; i < SCREEN_WIDTH; i++) {
 		buffer[SCREEN_HEIGHT -1][i] = line;
 	}
+}
+
+WORD idViewManager::GetColorByLane(int lane) {
+	WORD laneColors[4] = {0x0001,0x0002,0x0004,0x0006};
+	if (lane >= 0 && lane < 4) {
+		return laneColors[lane];
+	}
+	return 0x0007;
+}
+
+WORD idViewManager::GetPressedColorByLane(int lane) {
+	WORD laneColorsPressed[4] = { 0x0009,0x000A,0x000C,0x000E };
+	if (lane >= 0 && lane < 4) {
+		return laneColorsPressed[lane];
+	}
+	return 0x000F;
+}
+
+void idViewManager::DrawCharRectangle(const rectangle_t rect, const int unicodeChar, const WORD bgColor, const WORD fgColor) {
+	int originY = int(floor(rect.origin_y));
+	int height = int(floor(rect.height));
+	
+	CHAR_INFO toDraw;
+	toDraw.Attributes = bgColor | fgColor;
+	toDraw.Char.UnicodeChar = unicodeChar;
+	for (int i = originY; i < originY+height; i++) {
+		for (int j = rect.origin_x; j < rect.origin_x+rect.width; j++) {
+			buffer[i][j] = toDraw;
+		}
+	}
+}
+
+void idViewManager::DrawBottomBar(bool* inputsHeld) {
+	//REMPLACER 4 PAR GAME_LANE_COUNT
+	rectangle_t rect;
+	rect.height = 1;
+	rect.width = LANE_WIDTH;
+	
+	char laneChars[4] = { 'A','Z','E','R' };
+	for (int i = 0; i < 4; i++) {
+		rect.origin_x = i * LANE_WIDTH;
+		rect.origin_y = SCREEN_HEIGHT - 2;
+		DrawCharRectangle(rect, 0x2584, 0x00F0,
+			(inputsHeld[i]) ? GetColorByLane(i) : BACKGROUND_COLOR);
+		rect.origin_y = SCREEN_HEIGHT - 1;
+		DrawCharRectangle(rect, laneChars[i],
+			(inputsHeld[i]) ? GetColorByLane(i) << 4 : BACKGROUND_COLOR,
+			(inputsHeld[i]) ? TEXT_COLOR : GetColorByLane(i));
+	}
+}
+
+void idViewManager::DrawString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor) {
+	CHAR_INFO res;
+	res.Attributes = bgColor | fgColor;
+	for (size_t i = 0; i < toDraw.length(); i++) {
+		res.Char.UnicodeChar = toDraw[i];
+		buffer[y][x + i] = res;
+	}
+}
+
+void idViewManager::DrawUI() {
+
 }

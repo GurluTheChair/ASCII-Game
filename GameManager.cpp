@@ -44,6 +44,7 @@ void idGameManager::StartGame() {
 
 	timeSinceStart = 0.0f;
 	comboCount = 0;
+	missedNotes = 0;
 	score = 0;
 
 	UpdateGame();
@@ -112,6 +113,7 @@ void idGameManager::UpdateGameData() {
 			score += int(comboCount * (note.endSeconds - note.startSeconds) * 100);
 		} else {
 			comboCount = 0;
+			missedNotes++;
 		}
 	}
 	currentLevel.ClearPlayedNotes();
@@ -123,7 +125,7 @@ void idGameManager::UpdateGameView() {
 	view.Clear();
 
 	idViewManager::rectangle_t rectangle;
-	WORD noteColor = 0x0000;
+	WORD noteColor = BACKGROUND_COLOR;
 	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
 	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
 		const std::deque<idMusicNote> &laneNotes = currentLevel.GetActiveNotes(lane);
@@ -138,13 +140,13 @@ void idGameManager::UpdateGameView() {
 
 			switch (note.state) {
 				case idMusicNote::state_t::ACTIVE:
-					noteColor = 0x000F;
+					noteColor = NOTE_COLOR;
 					break;
 				case idMusicNote::state_t::PRESSED:
-					noteColor = 0x000E;
+					noteColor = view.GetPressedColorByLane(lane);
 					break;
 				case idMusicNote::state_t::MISSED:
-					noteColor = 0x0008;
+					noteColor = MISSED_COLOR;
 					break;
 				default:
 					break;
@@ -153,7 +155,12 @@ void idGameManager::UpdateGameView() {
 			view.DrawRectangle(rectangle, BACKGROUND_COLOR, noteColor);
 		}
 	}
-
-	view.DrawBoard();
+	
+	bool heldKeys[GAME_LANE_COUNT];
+	int laneKeys[GAME_LANE_COUNT] = { 'A', 'Z', 'E', 'R' };
+	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
+		heldKeys[i] = input.WasKeyHeld(laneKeys[i]);
+	}
+	view.DrawBottomBar(heldKeys);
 	view.Refresh();
 }

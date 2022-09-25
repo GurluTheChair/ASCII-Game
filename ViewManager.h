@@ -4,19 +4,21 @@
 // Width of the screen
 #define SCREEN_WIDTH 50
 // Height of the screen
-#define SCREEN_HEIGHT 36
+#define SCREEN_HEIGHT 37
 
 // Number of characters per lane
-#define LANE_WIDTH 7
+#define LANE_WIDTH 11
 // Number of characters per lane
 #define LANE_HEIGHT 35
 
 // Color of the background
 #define BACKGROUND_COLOR 0x0000
+// Color of text
+#define TEXT_COLOR 0x000F
 // Color of notes
-#define NOTE_COLOR 0x0007
+#define NOTE_COLOR 0x000F
 // Color of a note being pressed
-#define PRESSED_COLOR 0x000F
+#define PRESSED_COLOR 0x000E
 // Color of a note that was missed
 #define MISSED_COLOR 0x0008
 
@@ -36,6 +38,12 @@ class idViewManager {
 		void Clear();
 		void Refresh();
 		void DrawBoard();
+		WORD GetColorByLane(int lane);
+		WORD GetPressedColorByLane(int lane);
+		void DrawCharRectangle(rectangle_t rect, const int unicodeChar, const WORD bgColor, const WORD fgColor);
+		void DrawBottomBar(bool* inputsHeld);
+		void DrawString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor);
+		void DrawUI();
 	private:
 		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 		HANDLE outputHandle;
