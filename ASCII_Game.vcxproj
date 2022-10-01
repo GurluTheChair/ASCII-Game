@@ -142,6 +142,8 @@
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\MusicNote.cpp" />
+    <ClCompile Include="src\SoundManager.cpp" />
+    <ClCompile Include="src\SoundUtils.cpp" />
     <ClCompile Include="src\ViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\MusicNote.h" />
     <ClInclude Include="src\NYTimer.h" />
+    <ClInclude Include="src\SoundManager.h" />
+    <ClInclude Include="src\SoundUtils.h" />
     <ClInclude Include="src\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
