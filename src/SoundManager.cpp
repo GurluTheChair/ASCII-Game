@@ -61,6 +61,7 @@ bool idSoundManager::LoadWav(const std::string &fileName) {
 	int32_t numChannels, sampleRate, bitsPerSample, dataSize;
 	char* soundData = LoadWavFile(fileName, numChannels, sampleRate, bitsPerSample, dataSize);
 	if (soundData == nullptr) {
+		alDeleteBuffers(1, &newBuffer);
 		return false;
 	}
 
@@ -72,6 +73,7 @@ bool idSoundManager::LoadWav(const std::string &fileName) {
 		} else if (bitsPerSample == 16) {
 			format = AL_FORMAT_MONO16;
 		} else {
+			alDeleteBuffers(1, &newBuffer);
 			return false;
 		}
 	} else if (numChannels == 2) {
@@ -82,9 +84,11 @@ bool idSoundManager::LoadWav(const std::string &fileName) {
 			format = AL_FORMAT_STEREO16;
 		}
 		else {
+			alDeleteBuffers(1, &newBuffer);
 			return false;
 		}
 	} else {
+		alDeleteBuffers(1, &newBuffer);
 		return false;
 	}
 

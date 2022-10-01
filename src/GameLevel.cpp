@@ -23,8 +23,8 @@ bool idGameLevel::LoadFile(const std::string& levelFilename) {
 	std::ifstream levelFile(levelFilename);
 
 	// Load main level data
-	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, songFilename)
 	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, songName)
+	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, songFilename)
 	EXTRACT_WITH_FAIL_RETURN(levelFile, lengthSeconds)
 	EXTRACT_WITH_FAIL_RETURN(levelFile, laneLengthSeconds)
 	size_t notesCount;
