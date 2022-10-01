@@ -8,6 +8,7 @@
 #include "GameLevel.h"
 #include "InputManager.h"
 #include "ViewManager.h"
+#include "SoundManager.h"
 #include "GameManager.h"
 
 using namespace std;
@@ -20,12 +21,12 @@ int main(void) {
 	HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	idViewManager view(stdoutHandle, dwBufferSize, dwBufferCoord, rcRegion);
 	view.HideCursor();
-	
+
 	idInputManager input;
+	idSoundManager sound;
+	idGameManager game(input, view, sound, 60.0);
 
-	idGameManager game(input, view, 60.0);
-
-	if (game.InitGame(".\\songs\\megalovania.txt")) {
+	if (game.InitGame(".\\songs\\mii_channel.txt")) {
 		game.StartGame();
 	} else {
 		return -1;

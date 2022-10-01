@@ -73,5 +73,8 @@
     <Text Include="songs\megalovania.txt">
       <Filter>Fichiers de ressources\songs</Filter>
     </Text>
+    <Text Include="songs\mii_channel.txt">
+      <Filter>Fichiers de ressources\songs</Filter>
+    </Text>
   </ItemGroup>
 </Project>

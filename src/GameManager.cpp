@@ -9,13 +9,13 @@
 #include "GameLevel.h"
 #include "InputManager.h"
 #include "ViewManager.h"
+#include "SoundManager.h"
 #include "GameManager.h"
 
-#include <iostream>
-
-idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, const float _frameRate)
+idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate)
 : input(_input)
 , view(_view)
+, sound(_sound)
 , frameRate(_frameRate)
 , deltaTime(0.0f)
 , timeSinceStart(0.0f)
@@ -36,10 +36,13 @@ bool idGameManager::InitGame(const std::string& levelFilename) {
 }
 
 void idGameManager::StartGame() {
-	NYTimer timer;
-	timer.start();
-	float startTime = timer.getElapsedSeconds();
-	
+	// TODO : replace hard-coded value with constant
+	std::string songFilePath(".\\songs\\");
+	songFilePath.append(currentLevel.GetSongFilename());
+
+	if (!sound.LoadWav(songFilePath))
+		return;
+
 	const float& songLength = currentLevel.GetLengthSeconds();
 	const float delayBetweenFrames = 1.0f / frameRate;
 
@@ -49,8 +52,16 @@ void idGameManager::StartGame() {
 	score = 0;
 
 	UpdateGame();
+
+	NYTimer timer;
+	timer.start();
+	float startTime = timer.getElapsedSeconds();
+
 	float previousUpdateTime = startTime;
 	float currentLoopTime;
+
+	if (!sound.Play(songFilePath))
+		return;
 
 	while (timeSinceStart < songLength) {
 		input.UpdateKeyStates();
@@ -61,6 +72,7 @@ void idGameManager::StartGame() {
 			deltaTime = currentLoopTime - previousUpdateTime;
 
 			UpdateGame();
+			sound.UpdateSourceStates();
 			input.ResetKeyStates();
 
 			previousUpdateTime = currentLoopTime;
