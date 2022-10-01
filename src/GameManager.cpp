@@ -32,6 +32,8 @@ bool idGameManager::InitGame(const std::string& levelFilename) {
 	input.RegisterKey('E');
 	input.RegisterKey('R');
 
+	view.DrawUIBorder(BACKGROUND_COLOR, TEXT_COLOR);
+
 	return loadingWorked;
 }
 
@@ -51,6 +53,7 @@ void idGameManager::StartGame() {
 	missedNotes = 0;
 	score = 0;
 
+	view.DrawUI(currentLevel.GetSongName(), currentLevel.GetLengthSeconds(), BACKGROUND_COLOR, TEXT_COLOR);
 	UpdateGame();
 
 	NYTimer timer;
@@ -139,7 +142,7 @@ void idGameManager::UpdateGameData() {
 void idGameManager::UpdateGameView() {
 	// TODO : replace hard-coded values with variables/constants
 
-	view.Clear();
+	view.ClearGame();
 
 	idViewManager::rectangle_t rectangle;
 	WORD noteColor = BACKGROUND_COLOR;
@@ -179,5 +182,6 @@ void idGameManager::UpdateGameView() {
 		heldKeys[i] = input.WasKeyHeld(laneKeys[i]);
 	}
 	view.DrawBottomBar(heldKeys);
+	view.UpdateUI(int(timeSinceStart), score, comboCount, missedNotes, BACKGROUND_COLOR, TEXT_COLOR);
 	view.Refresh();
 }

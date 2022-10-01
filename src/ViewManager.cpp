@@ -73,9 +73,10 @@ void idViewManager::DrawRectangle(const idViewManager::rectangle_t& rectangle, c
 	}
 }
 
-void idViewManager::Clear() {
+void idViewManager::ClearGame() {
+	//REMPLACER 4 PAR GAME_LANE_COUNT
 	for (size_t i = 0; i < SCREEN_HEIGHT; i++){
-		for (size_t j = 0; j < SCREEN_WIDTH; j++){
+		for (size_t j = 0; j < LANE_WIDTH*4; j++){
 			buffer[i][j].Char.UnicodeChar = ' ';
 			buffer[i][j].Attributes = BACKGROUND_COLOR;
 		}
@@ -154,6 +155,64 @@ void idViewManager::DrawString(const std::string& toDraw, const int x, const int
 	}
 }
 
-void idViewManager::DrawUI() {
+void idViewManager::DrawUIBorder(const WORD bgColor, const WORD fgColor) {
+	CHAR_INFO border;
+	border.Attributes = bgColor | fgColor;
+	//REMPLACER 4 PAR GAME_LANE_COUNT
+	int UI_X_ORIGIN = LANE_WIDTH * 4 + UI_SEPARATOR;
 
+	for (size_t i = 0; i < SCREEN_HEIGHT; i++) {
+		if (i == 0 || i == 6 || i == SCREEN_HEIGHT - 1) {
+			border.Char.UnicodeChar = '=';
+			for (size_t j = 1; j < UI_WIDTH - 1; j++) {
+				buffer[i][UI_X_ORIGIN + j] = border;
+			}
+		}
+		else {
+			border.Char.UnicodeChar = '|';
+			for (size_t j = 0; j < UI_WIDTH; j++) {
+				if (j == 0 || j == UI_WIDTH - 1) {
+					buffer[i][UI_X_ORIGIN + j] = border;
+				}
+			}
+		}
+	}
+}
+
+std::string idViewManager::GetFormatedTime(const int time) {
+	int minutes = time / 60;
+	int seconds = time % 60;
+	std::string res = "";
+	if (minutes < 10) {
+		res += "0";
+	}
+	res += std::to_string(minutes) + ":";
+	if (seconds < 10) {
+		res += "0";
+	}
+	return  res + std::to_string(seconds);
+}
+
+void idViewManager::DrawUI(const std::string songName, const int songLength, const WORD bgColor, const WORD fgColor) {
+	int UI_X_ORIGIN = LANE_WIDTH * 4 + UI_SEPARATOR;
+	const std::string time_string = "00:00 / " + GetFormatedTime(songLength);
+	const int time_string_length = 14;
+
+	//Draw the Infos
+	idViewManager::DrawString(songName, UI_X_ORIGIN + (UI_WIDTH / 2) - (songName.length() / 2), 2, bgColor, fgColor);
+	idViewManager::DrawString(time_string, UI_X_ORIGIN + (UI_WIDTH / 2) - (time_string_length / 2), 4, bgColor, fgColor);
+	idViewManager::DrawString("SCORE    ", UI_X_ORIGIN + (UI_WIDTH / 6), 8, bgColor, fgColor);
+	idViewManager::DrawString("COMBO    ", UI_X_ORIGIN + (UI_WIDTH / 6), 9, bgColor, fgColor);
+	idViewManager::DrawString("MISS     ", UI_X_ORIGIN + (UI_WIDTH / 6), 10, bgColor, fgColor);
+}
+
+void idViewManager::UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes, const WORD bgColor, const WORD fgColor) {
+	int UI_X_ORIGIN = LANE_WIDTH * 4 + UI_SEPARATOR;
+	const int time_string_length = 14;
+
+	//Draw the Infos
+	idViewManager::DrawString(GetFormatedTime(timeSinceStart), UI_X_ORIGIN + (UI_WIDTH / 2) - (time_string_length / 2), 4, bgColor, fgColor);
+	idViewManager::DrawString(std::to_string(score)+"   ", UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 8, bgColor, fgColor);
+	idViewManager::DrawString(std::to_string(comboCount)+"   ", UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 9, bgColor, fgColor);
+	idViewManager::DrawString(std::to_string(missedNotes), UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 10, bgColor, fgColor);
 }
