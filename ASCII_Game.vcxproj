@@ -127,20 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ASCII_Game.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="MusicNote.cpp" />
-    <ClCompile Include="ViewManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\GameLevel.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
+    <ClCompile Include="src\MusicNote.cpp" />
+    <ClCompile Include="src\ViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameLevel.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="MusicNote.h" />
-    <ClInclude Include="NYTimer.h" />
-    <ClInclude Include="ViewManager.h" />
+    <ClInclude Include="src\GameLevel.h" />
+    <ClInclude Include="src\GameManager.h" />
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\MusicNote.h" />
+    <ClInclude Include="src\NYTimer.h" />
+    <ClInclude Include="src\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="songs\megalovania.txt" />

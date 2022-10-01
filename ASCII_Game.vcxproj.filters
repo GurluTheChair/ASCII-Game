@@ -18,43 +18,43 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ASCII_Game.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
+    <ClCompile Include="src\InputManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManager.cpp">
+    <ClCompile Include="src\ViewManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameLevel.cpp">
+    <ClCompile Include="src\GameLevel.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
+    <ClCompile Include="src\GameManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="MusicNote.cpp">
+    <ClCompile Include="src\MusicNote.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputManager.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\GameLevel.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="NYTimer.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\GameManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManager.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\InputManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GameLevel.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\MusicNote.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\NYTimer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="MusicNote.h">
-      <Filter>Fichiers sources</Filter>
+    <ClInclude Include="src\ViewManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
