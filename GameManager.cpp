@@ -21,6 +21,7 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, const
 , timeSinceStart(0.0f)
 , comboCount(0)
 , score(0)
+, missedNotes(0)
 { }
 
 bool idGameManager::InitGame(const std::string& levelFilename) {
@@ -82,22 +83,26 @@ void idGameManager::UpdateGameData() {
 	idMusicNote* bottomNotes[4];
 	currentLevel.GetBottomNotes(bottomNotes);
 
-	const float pressEarlyTolerance = 0.05f;
-	const float pressLateTolerance = 0.05f;
-	const float releaseEarlyTolerance = 0.05f;
+	const float pressEarlyTolerance = 0.1f;
+	const float pressLateTolerance = 0.1f;
+	const float releaseEarlyTolerance = 0.1f;
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 	{
 		if ((bottomNotes[i] != nullptr) && 
 			(bottomNotes[i]->state != idMusicNote::state_t::MISSED)) {
 			if (input.WasKeyHeld(laneKeys[i])) {
-				if ((timeSinceStart >= bottomNotes[i]->startSeconds - pressEarlyTolerance) &&
-					(timeSinceStart <= bottomNotes[i]->startSeconds + pressLateTolerance)) {
-					bottomNotes[i]->state = idMusicNote::state_t::PRESSED;
-				} else {
-					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
+				// TODO: differenciate between press and hold
+				if (bottomNotes[i]->state == idMusicNote::state_t::ACTIVE) {
+					if ((timeSinceStart >= bottomNotes[i]->startSeconds - pressEarlyTolerance) &&
+						(timeSinceStart <= bottomNotes[i]->startSeconds + pressLateTolerance)) {
+						bottomNotes[i]->state = idMusicNote::state_t::PRESSED;
+					} else {
+						bottomNotes[i]->state = idMusicNote::state_t::MISSED;
+					}
 				}
 			} else {
-				if (timeSinceStart > bottomNotes[i]->startSeconds + pressLateTolerance) {
+				if ((timeSinceStart > bottomNotes[i]->startSeconds + pressLateTolerance) &&
+					(timeSinceStart <= bottomNotes[i]->endSeconds - releaseEarlyTolerance)) {
 					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
 				}
 			}

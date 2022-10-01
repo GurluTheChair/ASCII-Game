@@ -52,5 +52,4 @@ class idViewManager {
 		SMALL_RECT rcRegion;
 };
 
-
 #endif
