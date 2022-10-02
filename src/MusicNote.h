@@ -1,6 +1,8 @@
 #ifndef __MUSIC_NOTE__
 #define __MUSIC_NOTE__
 
+#include <istream>
+
 class idMusicNote {
 	public :
 		enum class state_t {

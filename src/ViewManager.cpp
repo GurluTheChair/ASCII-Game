@@ -1,6 +1,5 @@
-#include <windows.h>
 #include <cmath>
-#include <string>
+#include <windows.h>
 
 #include "ViewManager.h"
 
@@ -25,7 +24,7 @@ void idViewManager::HideCursor() const {
 	SetConsoleCursorInfo(outputHandle, &info);
 }
 
-CHAR_INFO idViewManager::GetCharInfo(const u_char displayValue, const WORD bgColor, const WORD fgColor) const {
+CHAR_INFO idViewManager::GetCharInfo(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const {
 	CHAR_INFO res;
 	res.Attributes = bgColor | fgColor;
 	if (displayValue > 0 && displayValue <= 8) {

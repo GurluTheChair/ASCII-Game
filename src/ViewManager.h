@@ -1,6 +1,9 @@
 #ifndef __VIEW_MANAGER__
 #define __VIEW_MANAGER__
 
+#include <wincontypes.h>
+#include <string>
+
 // Width of the screen
 #define SCREEN_WIDTH 97
 // Height of the screen
@@ -38,7 +41,7 @@ class idViewManager {
 
 		idViewManager(const HANDLE& _outputHandle, const COORD& _dwBufferSize, const COORD& _dwBufferCoord, const SMALL_RECT& _rcRegion);
 		void HideCursor() const;
-		CHAR_INFO GetCharInfo(const u_char displayValue, const WORD bgColor, const WORD fgColor) const;
+		CHAR_INFO GetCharInfo(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const;
 		void DrawRectangle(const rectangle_t& rectangle, const WORD bgColor, const WORD fgColor);
 		void ClearGame();
 		void Refresh();

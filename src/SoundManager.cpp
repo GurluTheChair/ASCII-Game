@@ -158,7 +158,7 @@ bool idSoundManager::Play(const std::string &fileName, const bool repeat) {
 }
 
 void idSoundManager::UpdateSourceStates() {
-	int playingSize = playingSources.size();
+	size_t playingSize = playingSources.size();
 	// If no source is playing, no need to do anything
 	if (playingSize <= 0) {
 		return;
@@ -166,7 +166,7 @@ void idSoundManager::UpdateSourceStates() {
 
 	// Move stopped sources to unplaying source pool
 	ALint sourceState;
-	for (int i = playingSize - 1; i >= 0; --i) {
+	for (int i = int(playingSize - 1); i >= 0; --i) {
 		alGetSourcei(playingSources[i], AL_SOURCE_STATE, &sourceState);
 		if (sourceState == AL_STOPPED) {
 			alSourcei(playingSources[i], AL_BUFFER, NULL);

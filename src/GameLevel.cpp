@@ -1,25 +1,20 @@
-#include <string>
-#include <vector>
-#include <deque>
-#include <istream>
 #include <fstream>
 #include <algorithm>
 
-#include "MusicNote.h"
 #include "GameLevel.h"
 
 #define EXTRACT_LINE_WITH_FAIL_RETURN(istream, string) if (!std::getline(istream, string)) { return false; }
 #define EXTRACT_WITH_FAIL_RETURN(istream, variable) if (!(istream >> variable)) { return false; }
 
-static bool HighestStartSeconds(const idMusicNote & left, const idMusicNote & right) {
+static bool HighestStartSeconds(const idMusicNote &left, const idMusicNote &right) {
 	return left.startSeconds > right.startSeconds;
 }
 
-static bool LowestEndSeconds(const idMusicNote& left, const idMusicNote& right) {
+static bool LowestEndSeconds(const idMusicNote &left, const idMusicNote &right) {
 	return left.endSeconds < right.endSeconds;
 }
 
-bool idGameLevel::LoadFile(const std::string& levelFilename) {
+bool idGameLevel::LoadFile(const std::string &levelFilename) {
 	std::ifstream levelFile(levelFilename);
 
 	// Load main level data
@@ -80,7 +75,7 @@ const std::deque<idMusicNote>& idGameLevel::GetActiveNotes(const unsigned int la
 	return activeNotes[lane];
 }
 
-void idGameLevel::GetBottomNotes(idMusicNote** output) {
+void idGameLevel::GetBottomNotes(idMusicNote **output) {
 	for (int i = 0; i < GAME_LANE_COUNT; i++) {
 		if (activeNotes[i].size() > 0)
 			output[i] = &activeNotes[i].front();

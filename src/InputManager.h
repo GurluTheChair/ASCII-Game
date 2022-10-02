@@ -1,6 +1,8 @@
 #ifndef __INPUT_MANAGER__
 #define __INPUT_MANAGER__
 
+#include <unordered_map>
+
 class idInputManager {
 	public:
 		// Whether key is currently down

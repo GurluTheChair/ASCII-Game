@@ -1,6 +1,12 @@
 #ifndef __GAME_LEVEL__
 #define __GAME_LEVEL__
 
+#include <string>
+#include <vector>
+#include <deque>
+
+#include "MusicNote.h"
+
 #define GAME_LANE_COUNT 4
 
 class idGameLevel {

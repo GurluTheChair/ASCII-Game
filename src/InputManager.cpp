@@ -1,4 +1,3 @@
-#include <unordered_map>
 #include <windows.h>
 
 #include "InputManager.h"

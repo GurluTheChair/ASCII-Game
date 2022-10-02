@@ -1,15 +1,6 @@
-#include <string>
-#include <vector>
-#include <deque>
-#include <unordered_map>
-#include <windows.h>
-
 #include "NYTimer.h"
 #include "MusicNote.h"
-#include "GameLevel.h"
-#include "InputManager.h"
-#include "ViewManager.h"
-#include "SoundManager.h"
+
 #include "GameManager.h"
 
 idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate)
@@ -53,7 +44,7 @@ void idGameManager::StartGame() {
 	missedNotes = 0;
 	score = 0;
 
-	view.DrawUI(currentLevel.GetSongName(), currentLevel.GetLengthSeconds(), BACKGROUND_COLOR, TEXT_COLOR);
+	view.DrawUI(currentLevel.GetSongName(), int(currentLevel.GetLengthSeconds()), BACKGROUND_COLOR, TEXT_COLOR);
 	UpdateGame();
 
 	NYTimer timer;
