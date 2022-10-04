@@ -1,8 +1,10 @@
 #ifndef __VIEW_MANAGER__
 #define __VIEW_MANAGER__
 
-#include <wincontypes.h>
 #include <string>
+
+#include "ConsoleCanvas.h"
+#include "MusicNote.h"
 
 // Width of the screen
 #define SCREEN_WIDTH 97
@@ -39,28 +41,20 @@ class idViewManager {
 			float height;
 		};
 
-		idViewManager(const HANDLE& _outputHandle, const COORD& _dwBufferSize, const COORD& _dwBufferCoord, const SMALL_RECT& _rcRegion);
-		void HideCursor() const;
-		CHAR_INFO GetCharInfo(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const;
-		void DrawRectangle(const rectangle_t& rectangle, const WORD bgColor, const WORD fgColor);
-		void ClearGame();
+		idViewManager(idConsoleCanvas &_canvas);
+		
+		void ClearNotesArea();
 		void Refresh();
-		void DrawBoard();
-		WORD GetColorByLane(int lane);
-		WORD GetPressedColorByLane(int lane);
-		void DrawCharRectangle(rectangle_t rect, const int unicodeChar, const WORD bgColor, const WORD fgColor);
+		uint16_t GetColorByLane(int lane);
+		uint16_t GetPressedColorByLane(int lane);
+		void DrawNote(const idMusicNote &note, const int lane, const float laneLengthSeconds, const float time);
 		void DrawBottomBar(bool* inputsHeld);
-		void DrawString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor);
-		void DrawUIBorder(const WORD bgColor, const WORD fgColor);
-		std::string GetFormatedTime(const int time);
-		void DrawUI(const std::string songName, const int songLength, const WORD bgColor, const WORD fgColor);
-		void UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes, const WORD bgColor, const WORD fgColor);
+		void DrawUIBorder(const uint16_t bgColor, const uint16_t fgColor);
+		std::string GetFormatedTime(const int time); // TODO: move to proper class
+		void DrawUI(const std::string &songName, const int songLength, const uint16_t bgColor, const uint16_t fgColor);
+		void UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes, const uint16_t bgColor, const uint16_t fgColor);
 	private:
-		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
-		HANDLE outputHandle;
-		COORD dwBufferSize;
-		COORD dwBufferCoord;
-		SMALL_RECT rcRegion;
+		idConsoleCanvas &canvas;
 };
 
 #endif

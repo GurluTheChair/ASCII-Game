@@ -95,7 +95,7 @@ void idGameManager::UpdateGameData() {
 	{
 		// Get active notes for current lane
 		std::deque<idMusicNote> &laneNotes = currentLevel.GetEditableActiveNotes(i);
-		int laneNotesCount = laneNotes.size();
+		size_t laneNotesCount = laneNotes.size();
 		if (laneNotesCount <= 0) {
 			continue;
 		}
@@ -152,46 +152,26 @@ void idGameManager::UpdateGameData() {
 void idGameManager::UpdateGameView() {
 	// TODO : replace hard-coded values with variables/constants
 
-	view.ClearGame();
-
-	idViewManager::rectangle_t rectangle;
-	WORD noteColor = BACKGROUND_COLOR;
+	// Draw notes
+	view.ClearNotesArea();
 	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
 	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
 		const std::deque<idMusicNote> &laneNotes = currentLevel.GetReadonlyActiveNotes(lane);
-
 		for (int i = 0; i < laneNotes.size(); ++i) {
 			const idMusicNote& note = laneNotes[i];
-
-			rectangle.origin_x = lane * LANE_WIDTH;
-			rectangle.origin_y = LANE_HEIGHT * (1 + ((timeSinceStart - note.startSeconds) / laneLengthSeconds));
-			rectangle.width = LANE_WIDTH;
-			rectangle.height = LANE_HEIGHT * ((note.endSeconds - note.startSeconds) / laneLengthSeconds);
-
-			switch (note.state) {
-				case idMusicNote::state_t::ACTIVE:
-					noteColor = NOTE_COLOR;
-					break;
-				case idMusicNote::state_t::PRESSED:
-					noteColor = view.GetPressedColorByLane(lane);
-					break;
-				case idMusicNote::state_t::MISSED:
-					noteColor = MISSED_COLOR;
-					break;
-				default:
-					break;
-			}
-
-			view.DrawRectangle(rectangle, BACKGROUND_COLOR, noteColor);
+			view.DrawNote(note, lane, laneLengthSeconds, timeSinceStart);
 		}
 	}
 	
+	// Draw bottom bar
 	bool heldKeys[GAME_LANE_COUNT];
 	int laneKeys[GAME_LANE_COUNT] = { 'A', 'Z', 'E', 'R' };
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		heldKeys[i] = input.WasKeyHeld(laneKeys[i]);
 	}
+
 	view.DrawBottomBar(heldKeys);
 	view.UpdateUI(int(timeSinceStart), score, comboCount, missedNotes, BACKGROUND_COLOR, TEXT_COLOR);
+
 	view.Refresh();
 }

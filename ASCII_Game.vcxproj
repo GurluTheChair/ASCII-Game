@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ConsoleCanvas.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\GameLevel.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
@@ -147,6 +148,8 @@
     <ClCompile Include="src\ViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ConsoleCanvas.h" />
+    <ClInclude Include="src\ConsoleConstants.h" />
     <ClInclude Include="src\GameLevel.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\InputManager.h" />
