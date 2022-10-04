@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "NYTimer.h"
 #include "MusicNote.h"
 
@@ -140,7 +142,8 @@ void idGameManager::UpdateGameData() {
 		const idMusicNote& note = playedNotes[i];
 		if (note.state == idMusicNote::state_t::PRESSED) {
 			comboCount++;
-			score += int(comboCount * (note.endSeconds - note.startSeconds) * 1000);
+			int noteValue = std::lround((note.endSeconds - note.startSeconds) * 10);
+			score += comboCount * noteValue * 100;
 		} else {
 			comboCount = 0;
 			missedNotes++;
