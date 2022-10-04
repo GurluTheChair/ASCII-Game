@@ -45,17 +45,10 @@ bool idGameLevel::LoadFile(const std::string &levelFilename) {
 	return !levelFile.fail();
 }
 
-void idGameLevel::UpdateNotesActiveState(const float time) {
-	for (int i = 0; i < GAME_LANE_COUNT; i++) {
-		while ((activeNotes[i].size() > 0) && (time > activeNotes[i].front().endSeconds)) {
-			playedNotes.push_back(activeNotes[i].front());
-			activeNotes[i].pop_front();
-		}
-	}
-
+void idGameLevel::ActivateNotesForTime(const float time) {
 	if (unplayedNotes.size() > 0) {
 		idMusicNote nextNote = unplayedNotes.back();
-		while (nextNote.startSeconds >= (time - laneLengthSeconds)) {
+		while (nextNote.startSeconds < (time + laneLengthSeconds)) {
 			activeNotes[nextNote.column].push_back(nextNote);
 			unplayedNotes.pop_back();
 
@@ -65,23 +58,27 @@ void idGameLevel::UpdateNotesActiveState(const float time) {
 				break;
 		};
 	}
+}
+
+void idGameLevel::RemoveNotesForTime(const float time) {
+	for (int i = 0; i < GAME_LANE_COUNT; i++) {
+		while ((activeNotes[i].size() > 0) && (time > activeNotes[i].front().endSeconds)) {
+			playedNotes.push_back(activeNotes[i].front());
+			activeNotes[i].pop_front();
+		}
+	}
 
 	if (playedNotes.size() > 1) {
 		std::sort(playedNotes.begin(), playedNotes.end(), LowestEndSeconds);
 	}
 }
 
-const std::deque<idMusicNote>& idGameLevel::GetActiveNotes(const unsigned int lane) const {
+const std::deque<idMusicNote>& idGameLevel::GetReadonlyActiveNotes(const unsigned int lane) const {
 	return activeNotes[lane];
 }
 
-void idGameLevel::GetBottomNotes(idMusicNote **output) {
-	for (int i = 0; i < GAME_LANE_COUNT; i++) {
-		if (activeNotes[i].size() > 0)
-			output[i] = &activeNotes[i].front();
-		else
-			output[i] = nullptr;
-	}
+std::deque<idMusicNote>& idGameLevel::GetEditableActiveNotes(const unsigned int lane) {
+	return activeNotes[lane];
 }
 
 const std::vector<idMusicNote>& idGameLevel::GetPlayedNotes() const {

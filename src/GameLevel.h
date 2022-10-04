@@ -14,11 +14,12 @@ class idGameLevel {
 		idGameLevel() = default;
 		
 		bool LoadFile(const std::string& levelFilename);
-		void UpdateNotesActiveState(const float time);
+		void ActivateNotesForTime(const float time);
+		void RemoveNotesForTime(const float time);
 
-		const std::deque<idMusicNote>& GetActiveNotes(const unsigned int lane) const;
-		void GetBottomNotes(idMusicNote **output);
+		const std::deque<idMusicNote>& GetReadonlyActiveNotes(const unsigned int lane) const;
 		const std::vector<idMusicNote>& GetPlayedNotes() const;
+		std::deque<idMusicNote>& GetEditableActiveNotes(const unsigned int lane);
 		void ClearPlayedNotes();
 
 		const std::string& GetSongName() const;

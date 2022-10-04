@@ -82,46 +82,65 @@ void idGameManager::UpdateGame() {
 
 void idGameManager::UpdateGameData() {
 	// # Input Management
-	// TODO : make improvements to make the game more generous and/or precise
-	currentLevel.UpdateNotesActiveState(timeSinceStart);
+	currentLevel.ActivateNotesForTime(timeSinceStart);
 	
 	int laneKeys[4] = { 'A', 'Z', 'E', 'R' };
-	idMusicNote* bottomNotes[4];
-	currentLevel.GetBottomNotes(bottomNotes);
 
 	const float pressEarlyTolerance = 0.1f;
 	const float pressLateTolerance = 0.1f;
-	const float releaseEarlyTolerance = 0.1f;
+	const float releaseEarlyTolerance = 0.15f;
+	const float maxMissTimeDistance = 0.1f;
+
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 	{
-		if ((bottomNotes[i] != nullptr) && 
-			(bottomNotes[i]->state != idMusicNote::state_t::MISSED)) {
-			if (input.WasKeyHeld(laneKeys[i])) {
-				// TODO: differenciate between press and hold
-				if (bottomNotes[i]->state == idMusicNote::state_t::ACTIVE) {
-					if ((timeSinceStart >= bottomNotes[i]->startSeconds - pressEarlyTolerance) &&
-						(timeSinceStart <= bottomNotes[i]->startSeconds + pressLateTolerance)) {
-						bottomNotes[i]->state = idMusicNote::state_t::PRESSED;
-					} else {
-						bottomNotes[i]->state = idMusicNote::state_t::MISSED;
+		// Get active notes for current lane
+		std::deque<idMusicNote> &laneNotes = currentLevel.GetEditableActiveNotes(i);
+		int laneNotesCount = laneNotes.size();
+		if (laneNotesCount <= 0) {
+			continue;
+		}
+
+		// Retrieve the "lowest" (closest to the bottom) note that wasn't already played by the player
+		int bottomNoteIndex = 0;
+		idMusicNote* bottomNote;
+		do {
+			bottomNote = &laneNotes[bottomNoteIndex++];
+		} while (
+			(bottomNoteIndex < laneNotesCount) &&
+			(bottomNote->state != idMusicNote::state_t::ACTIVE) && 
+			(timeSinceStart > bottomNote->endSeconds - releaseEarlyTolerance));
+
+		// Update note state 
+		if (bottomNote->state != idMusicNote::state_t::MISSED) {
+			if (bottomNote->state == idMusicNote::state_t::ACTIVE) {
+				if (timeSinceStart > bottomNote->startSeconds + pressLateTolerance) {
+					bottomNote->state = idMusicNote::state_t::MISSED;
+				} else if (input.WasKeyPressed(laneKeys[i])) {
+					if (timeSinceStart >= bottomNote->startSeconds - pressEarlyTolerance) {
+						bottomNote->state = idMusicNote::state_t::PRESSED;
+					}
+					else if (timeSinceStart + maxMissTimeDistance >= bottomNote->startSeconds - pressEarlyTolerance) {
+						bottomNote->state = idMusicNote::state_t::MISSED;
 					}
 				}
-			} else {
-				if ((timeSinceStart > bottomNotes[i]->startSeconds + pressLateTolerance) &&
-					(timeSinceStart <= bottomNotes[i]->endSeconds - releaseEarlyTolerance)) {
-					bottomNotes[i]->state = idMusicNote::state_t::MISSED;
+			} else if (bottomNote->state == idMusicNote::state_t::PRESSED) {
+				if (input.WasKeyReleased(laneKeys[i]) && 
+					(timeSinceStart <= bottomNote->endSeconds - releaseEarlyTolerance)) {
+					bottomNote->state = idMusicNote::state_t::MISSED;
 				}
 			}
 		}
 	}
 
+	currentLevel.RemoveNotesForTime(timeSinceStart - pressLateTolerance);
+
 	// # Score Management
 	const std::vector<idMusicNote>& playedNotes = currentLevel.GetPlayedNotes();
 	for (int i = 0; i < playedNotes.size(); ++i) {
 		const idMusicNote& note = playedNotes[i];
-		if (note.state == idMusicNote::state_t::ACTIVE) {
+		if (note.state == idMusicNote::state_t::PRESSED) {
 			comboCount++;
-			score += int(comboCount * (note.endSeconds - note.startSeconds) * 100);
+			score += int(comboCount * (note.endSeconds - note.startSeconds) * 1000);
 		} else {
 			comboCount = 0;
 			missedNotes++;
@@ -139,7 +158,7 @@ void idGameManager::UpdateGameView() {
 	WORD noteColor = BACKGROUND_COLOR;
 	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
 	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
-		const std::deque<idMusicNote> &laneNotes = currentLevel.GetActiveNotes(lane);
+		const std::deque<idMusicNote> &laneNotes = currentLevel.GetReadonlyActiveNotes(lane);
 
 		for (int i = 0; i < laneNotes.size(); ++i) {
 			const idMusicNote& note = laneNotes[i];
