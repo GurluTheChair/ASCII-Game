@@ -3,6 +3,7 @@
 #include "NYTimer.h"
 #include "MusicNote.h"
 
+#include "FileConstants.h"
 #include "GameManager.h"
 
 idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate)
@@ -32,7 +33,7 @@ bool idGameManager::InitGame(const std::string& levelFilename) {
 
 void idGameManager::StartGame() {
 	// TODO : replace hard-coded value with constant
-	std::string songFilePath(".\\songs\\");
+	std::string songFilePath = FileConstants::SONGS_AUDIO_DIR_PATH;
 	songFilePath.append(currentLevel.GetSongFilename());
 
 	if (!sound.LoadWav(songFilePath))

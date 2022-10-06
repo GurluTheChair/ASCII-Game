@@ -13,8 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Fichiers de ressources\songs">
+    <Filter Include="Fichiers de ressources\songs %28levels%29">
       <UniqueIdentifier>{00131614-76fd-4dc1-ace4-083a345b4bfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\audio">
+      <UniqueIdentifier>{decd326f-59de-455a-a462-774f7cd1e5b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\audio\songs">
+      <UniqueIdentifier>{57a92542-f499-4b47-925e-26896906ccd5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,13 +83,18 @@
     <ClInclude Include="src\ConsoleConstants.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\FileConstants.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="songs\megalovania.txt">
-      <Filter>Fichiers de ressources\songs</Filter>
+    <Text Include="resources\game_data\songs\mii_channel.txt">
+      <Filter>Fichiers de ressources\songs %28levels%29</Filter>
     </Text>
-    <Text Include="songs\mii_channel.txt">
-      <Filter>Fichiers de ressources\songs</Filter>
-    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="resources\audio\songs\mii_channel.wav">
+      <Filter>Fichiers de ressources\audio\songs</Filter>
+    </Media>
   </ItemGroup>
 </Project>

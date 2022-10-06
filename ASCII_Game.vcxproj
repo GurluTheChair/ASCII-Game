@@ -148,6 +148,7 @@
     <ClCompile Include="src\ViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FileConstants.h" />
     <ClInclude Include="src\ConsoleCanvas.h" />
     <ClInclude Include="src\ConsoleConstants.h" />
     <ClInclude Include="src\GameLevel.h" />
@@ -160,8 +161,10 @@
     <ClInclude Include="src\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="songs\megalovania.txt" />
-    <Text Include="songs\mii_channel.txt" />
+    <Text Include="resources\game_data\songs\mii_channel.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="resources\audio\songs\mii_channel.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

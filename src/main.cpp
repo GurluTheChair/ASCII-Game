@@ -6,7 +6,7 @@
 #include "SoundManager.h"
 #include "GameManager.h"
 
-using namespace std;
+#include "FileConstants.h"
 
 int main(void) {
 	HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -18,7 +18,7 @@ int main(void) {
 	idSoundManager sound;
 	idGameManager game(input, view, sound, 60.0);
 
-	if (game.InitGame(".\\songs\\mii_channel.txt")) {
+	if (game.InitGame(FileConstants::LEVELS_DIR_PATH + "mii_channel.txt")) {
 		game.StartGame();
 	} else {
 		return -1;
