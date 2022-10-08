@@ -18,11 +18,7 @@ int main(void) {
 	idSoundManager sound;
 	idGameManager game(input, view, sound, 60.0);
 
-	if (game.InitGame(FileConstants::LEVELS_DIR_PATH + "mii_channel.txt")) {
-		game.StartGame();
-	} else {
-		return -1;
-	}
+	game.StartMainLoop();
 
 	return 0;
 }

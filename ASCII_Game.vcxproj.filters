@@ -13,14 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Fichiers de ressources\songs %28levels%29">
-      <UniqueIdentifier>{00131614-76fd-4dc1-ace4-083a345b4bfb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers de ressources\audio">
       <UniqueIdentifier>{decd326f-59de-455a-a462-774f7cd1e5b2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers de ressources\audio\songs">
       <UniqueIdentifier>{57a92542-f499-4b47-925e-26896906ccd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\game data">
+      <UniqueIdentifier>{792cc4d8-9405-4b48-bb26-c296ac97ebb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\game data\levels">
+      <UniqueIdentifier>{da04b480-2e10-48da-85ba-c9d9bd67ba3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -89,7 +92,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="resources\game_data\songs\mii_channel.txt">
-      <Filter>Fichiers de ressources\songs %28levels%29</Filter>
+      <Filter>Fichiers de ressources\game data\levels</Filter>
+    </Text>
+    <Text Include="resources\game_data\songs_list.txt">
+      <Filter>Fichiers de ressources\game data</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

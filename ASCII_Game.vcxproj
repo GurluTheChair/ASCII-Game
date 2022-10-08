@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="resources\game_data\songs\mii_channel.txt" />
+    <Text Include="resources\game_data\songs_list.txt" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="resources\audio\songs\mii_channel.wav" />
