@@ -161,10 +161,12 @@
     <ClInclude Include="src\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="resources\game_data\songs\ghost_choir.txt" />
     <Text Include="resources\game_data\songs\mii_channel.txt" />
     <Text Include="resources\game_data\songs_list.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="resources\audio\songs\ghost_duet.wav" />
     <Media Include="resources\audio\songs\mii_channel.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -97,9 +97,15 @@
     <Text Include="resources\game_data\songs_list.txt">
       <Filter>Fichiers de ressources\game data</Filter>
     </Text>
+    <Text Include="resources\game_data\songs\ghost_choir.txt">
+      <Filter>Fichiers de ressources\game data\levels</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Media Include="resources\audio\songs\mii_channel.wav">
+      <Filter>Fichiers de ressources\audio\songs</Filter>
+    </Media>
+    <Media Include="resources\audio\songs\ghost_duet.wav">
       <Filter>Fichiers de ressources\audio\songs</Filter>
     </Media>
   </ItemGroup>
