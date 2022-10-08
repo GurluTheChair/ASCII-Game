@@ -1,6 +1,7 @@
 #include <fstream>
 #include <algorithm>
 
+#include "constants/GameConstants.h"
 #include "GameLevel.h"
 
 #define EXTRACT_LINE_WITH_FAIL_RETURN(istream, string) if (!std::getline(istream, string)) { return false; }

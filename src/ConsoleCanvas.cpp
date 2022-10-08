@@ -20,7 +20,7 @@ void idConsoleCanvas::DrawSubpixelRectangle(const subpixelRectangle_t &rect, con
 	int topY = int(floor(rect.origin_y - rect.height));
 
 	// Draw bottom of "subpixel" rectangle (if necessary)
-	if (bottomY >= 0 && bottomY < SCREEN_HEIGHT) {
+	if (bottomY >= 0 && bottomY < CONSOLE_HEIGHT) {
 		int displayValue = lround((rect.origin_y - bottomY) * 7);
 		CHAR_INFO bottomChar = GetCharInfoFromDisplayValue(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rect.width; i++) {
@@ -29,7 +29,7 @@ void idConsoleCanvas::DrawSubpixelRectangle(const subpixelRectangle_t &rect, con
 	}
 
 	// Draw middle of "subpixel" rectangle (if necessary)
-	for (int i = min(bottomY - 1, SCREEN_HEIGHT - 1); ((i > topY) && (i >= 0)); i--) {
+	for (int i = min(bottomY - 1, CONSOLE_HEIGHT - 1); ((i > topY) && (i >= 0)); i--) {
 		CHAR_INFO middleChar = GetCharInfoFromDisplayValue(8, bgColor, fgColor);
 		for (size_t j = rect.origin_x; j < rect.origin_x + rect.width; j++) {
 			buffer[i][j] = middleChar;
@@ -37,7 +37,7 @@ void idConsoleCanvas::DrawSubpixelRectangle(const subpixelRectangle_t &rect, con
 	}
 
 	// Draw top of "subpixel" rectangle (if necessary)
-	if (topY >= 0 && topY < SCREEN_HEIGHT) {
+	if (topY >= 0 && topY < CONSOLE_HEIGHT) {
 		int displayValue = lround((rect.origin_y - rect.height - topY) * 7) + 8;
 		CHAR_INFO topChar = GetCharInfoFromDisplayValue(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rect.width; i++) {
@@ -79,7 +79,7 @@ void idConsoleCanvas::DrawCharHLine(const int startX, const int xLength, const i
 void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor) {
 	CHAR_INFO res;
 	res.Attributes = bgColor | fgColor;
-	for (size_t i = 0; (i < toDraw.length()) && (i < SCREEN_WIDTH); ++i) {
+	for (size_t i = 0; (i < toDraw.length()) && (i < CONSOLE_WIDTH); ++i) {
 		res.Char.UnicodeChar = toDraw[i];
 		buffer[y][x + i] = res;
 	}

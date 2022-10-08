@@ -5,9 +5,8 @@
 #include <vector>
 #include <deque>
 
+#include "constants/GameConstants.h"
 #include "MusicNote.h"
-
-#define GAME_LANE_COUNT 4
 
 class idGameLevel {
 	public:

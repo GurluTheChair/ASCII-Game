@@ -4,7 +4,7 @@
 #include <wincontypes.h>
 #include <string>
 
-#include "ConsoleConstants.h"
+#include "constants/ViewConstants.h"
 
 class idConsoleCanvas {
 	public:
@@ -28,12 +28,12 @@ class idConsoleCanvas {
 		void DrawCharHLine(const int startX, const int xLength, const int y, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor);
 		void DrawString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor);
 
-private:
+	private:
 		const HANDLE& outputHandle;
-		const COORD dwBufferSize = { SCREEN_WIDTH, SCREEN_HEIGHT };
+		const COORD dwBufferSize = { CONSOLE_WIDTH, CONSOLE_HEIGHT };
 		const COORD dwBufferCoord = { 0, 0 };
-		SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
-		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+		SMALL_RECT rcRegion = { 0, 0, CONSOLE_WIDTH - 1, CONSOLE_HEIGHT - 1 };
+		CHAR_INFO buffer[CONSOLE_HEIGHT][CONSOLE_WIDTH];
 
 		CHAR_INFO GetCharInfoFromDisplayValue(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const;
 
