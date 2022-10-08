@@ -25,6 +25,9 @@
     <Filter Include="Fichiers de ressources\game data\levels">
       <UniqueIdentifier>{da04b480-2e10-48da-85ba-c9d9bd67ba3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\constants">
+      <UniqueIdentifier>{fdb39124-b1e3-4e84-81aa-120ce3021628}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -83,11 +86,17 @@
     <ClInclude Include="src\ConsoleCanvas.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\ConsoleConstants.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\constants\FileConstants.h">
+      <Filter>Fichiers d%27en-tête\constants</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileConstants.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\constants\ViewConstants.h">
+      <Filter>Fichiers d%27en-tête\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="src\constants\GameConstants.h">
+      <Filter>Fichiers d%27en-tête\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="src\constants\InputConstants.h">
+      <Filter>Fichiers d%27en-tête\constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

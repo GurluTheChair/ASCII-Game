@@ -1,7 +1,9 @@
 #include <cmath>
 #include <fstream>
 
-#include "FileConstants.h"
+#include "constants/GameConstants.h"
+#include "constants/FileConstants.h"
+#include "constants/InputConstants.h"
 #include "NYTimer.h"
 #include "MusicNote.h"
 #include "GameManager.h"
@@ -33,7 +35,7 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 
 bool idGameManager::LoadLevelsData() {
 	// Load level list
-	std::ifstream file(FileConstants::LEVEL_LIST_FILE_PATH);
+	std::ifstream file(PathConstants::LEVEL_LIST_FILE_PATH);
 	if (!file.good() || !file.is_open()) {
 		return false;
 	}
@@ -59,7 +61,7 @@ bool idGameManager::LoadLevelsData() {
 	// Load high score list
 	file.close();
 	file.clear();
-	file.open(FileConstants::LEVEL_HIGH_SCORES_FILE_PATH);
+	file.open(PathConstants::LEVEL_HIGH_SCORES_FILE_PATH);
 	if (!file.good() || !file.is_open()) {
 		return true; // File does not exist, do nothing
 	}
@@ -79,6 +81,8 @@ bool idGameManager::LoadLevelsData() {
 		}
 		levelHighScores[levelFileName] = levelHighScore;
 	}
+
+	return true;
 }
 
 void idGameManager::StartMainLoop() {
@@ -174,14 +178,14 @@ bool idGameManager::SelectLevelUpdate() {
 
 bool idGameManager::PlayLevelInit() {
 	// Load level
-	std::string levelFilename = FileConstants::LEVELS_DIR_PATH;
+	std::string levelFilename = PathConstants::LEVELS_DIR_PATH;
 	levelFilename.append(levelList[selectedLevelIndex].first);
 
 	if (!currentLevel.LoadFile(levelFilename))
 		return false;
 
 	// Load level music data and play it
-	std::string songFilePath = FileConstants::SONGS_AUDIO_DIR_PATH;
+	std::string songFilePath = PathConstants::SONGS_AUDIO_DIR_PATH;
 	songFilePath.append(currentLevel.GetSongFilename());
 
 	if (!sound.LoadWav(songFilePath))
@@ -197,8 +201,8 @@ bool idGameManager::PlayLevelInit() {
 
 	// Draw UI
 	const float songLength = currentLevel.GetLengthSeconds();
-	view.DrawUIBorder(BACKGROUND_COLOR, TEXT_COLOR);
-	view.DrawUI(currentLevel.GetSongName(), int(songLength), BACKGROUND_COLOR, TEXT_COLOR);
+	view.DrawUIBorder();
+	view.DrawUI(currentLevel.GetSongName(), int(songLength));
 
 	return true;
 }
@@ -218,8 +222,6 @@ bool idGameManager::PlayLevelUpdate() {
 void idGameManager::UpdateGameData() {
 	// # Input Management
 	currentLevel.ActivateNotesForTime(timeSinceStepStart);
-	
-	int laneKeys[4] = { 'A', 'Z', 'E', 'R' };
 
 	const float pressEarlyTolerance = 0.1f;
 	const float pressLateTolerance = 0.1f;
@@ -250,7 +252,7 @@ void idGameManager::UpdateGameData() {
 			if (bottomNote->state == idMusicNote::state_t::ACTIVE) {
 				if (timeSinceStepStart > bottomNote->startSeconds + pressLateTolerance) {
 					bottomNote->state = idMusicNote::state_t::MISSED;
-				} else if (input.WasKeyPressed(laneKeys[i])) {
+				} else if (input.WasKeyPressed(KeyConstants::LANE_KEYS[i])) {
 					if (timeSinceStepStart >= bottomNote->startSeconds - pressEarlyTolerance) {
 						bottomNote->state = idMusicNote::state_t::PRESSED;
 					}
@@ -259,7 +261,7 @@ void idGameManager::UpdateGameData() {
 					}
 				}
 			} else if (bottomNote->state == idMusicNote::state_t::PRESSED) {
-				if (input.WasKeyReleased(laneKeys[i]) && 
+				if (input.WasKeyReleased(KeyConstants::LANE_KEYS[i]) &&
 					(timeSinceStepStart <= bottomNote->endSeconds - releaseEarlyTolerance)) {
 					bottomNote->state = idMusicNote::state_t::MISSED;
 				}
@@ -286,8 +288,6 @@ void idGameManager::UpdateGameData() {
 }
 
 void idGameManager::UpdateGameView() {
-	// TODO : replace hard-coded values with variables/constants
-
 	// Draw notes
 	view.ClearNotesArea();
 	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
@@ -301,13 +301,12 @@ void idGameManager::UpdateGameView() {
 	
 	// Draw bottom bar
 	bool heldKeys[GAME_LANE_COUNT];
-	int laneKeys[GAME_LANE_COUNT] = { 'A', 'Z', 'E', 'R' };
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
-		heldKeys[i] = input.WasKeyHeld(laneKeys[i]);
+		heldKeys[i] = input.WasKeyHeld(KeyConstants::LANE_KEYS[i]);
 	}
 
 	view.DrawBottomBar(heldKeys);
-	view.UpdateUI(int(timeSinceStepStart), score, comboCount, missedNotes, BACKGROUND_COLOR, TEXT_COLOR);
+	view.UpdateUI(int(timeSinceStepStart), score, comboCount, missedNotes);
 
 	view.Refresh();
 }

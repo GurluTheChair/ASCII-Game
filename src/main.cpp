@@ -6,15 +6,13 @@
 #include "SoundManager.h"
 #include "GameManager.h"
 
-#include "FileConstants.h"
-
 int main(void) {
 	HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	idConsoleCanvas canvas(stdoutHandle);
 	canvas.SetCursorVisible(false);
 
-	idViewManager view(canvas);
 	idInputManager input;
+	idViewManager view(canvas);
 	idSoundManager sound;
 	idGameManager game(input, view, sound, 60.0);
 
