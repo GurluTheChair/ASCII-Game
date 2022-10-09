@@ -27,7 +27,8 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		input.RegisterKey(KeyConstants::LANE_KEYS[i]);
 	}
-	
+
+	// Load data about levels
 	if (!LoadLevelsData()) {
 		nextStep = gameStep_t::QUIT;
 	}
@@ -35,7 +36,7 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 
 bool idGameManager::LoadLevelsData() {
 	// Load level list
-	std::ifstream file(PathConstants::LEVEL_LIST_FILE_PATH);
+	std::ifstream file(PathConstants::GameData::LEVEL_LIST);
 	if (!file.good() || !file.is_open()) {
 		return false;
 	}
@@ -61,7 +62,7 @@ bool idGameManager::LoadLevelsData() {
 	// Load high score list
 	file.close();
 	file.clear();
-	file.open(PathConstants::LEVEL_HIGH_SCORES_FILE_PATH);
+	file.open(PathConstants::GameData::LEVEL_HIGH_SCORES);
 	if (!file.good() || !file.is_open()) {
 		return true; // File does not exist, do nothing
 	}
@@ -179,21 +180,25 @@ bool idGameManager::SelectLevelUpdate() {
 
 bool idGameManager::PlayLevelInit() {
 	// Load level
-	std::string levelFilename = PathConstants::LEVELS_DIR_PATH;
+	std::string levelFilename = PathConstants::GameData::LEVELS_DIR;
 	levelFilename.append(levelList[selectedLevelIndex].first);
 
-	if (!currentLevel.LoadFile(levelFilename))
+	if (!currentLevel.LoadFile(levelFilename)) {
 		return false;
+	}
+		
 
 	// Load level music data and play it
-	std::string songFilePath = PathConstants::SONGS_AUDIO_DIR_PATH;
+	std::string songFilePath = PathConstants::Audio::SONGS_DIR;
 	songFilePath.append(currentLevel.GetSongFilename());
 
-	if (!sound.LoadWav(songFilePath))
+	if (!sound.LoadWav(songFilePath)) {
 		return false;
+	}
 
-	if (!sound.Play(songFilePath))
+	if (!sound.Play(songFilePath)) {
 		return false;
+	}
 
 	// Prepare scoring properties
 	comboCount = 0;
