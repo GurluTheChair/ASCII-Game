@@ -85,6 +85,13 @@ void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const i
 	}
 }
 
+void idConsoleCanvas::DrawCenteredString(const std::string& toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor) {
+	if (toDraw.length() < max_length) {
+		int centered_x = x + (max_length / 2) - (toDraw.length() / 2);
+		DrawString(toDraw, centered_x, y, bgColor,fgColor);
+	}
+}
+
 // Converts a display value (the "index" of a "subpixel" rectangle), to the right unicode character
 // and also puts the right background and foreground color
 CHAR_INFO idConsoleCanvas::GetCharInfoFromDisplayValue(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const {
@@ -105,4 +112,20 @@ CHAR_INFO idConsoleCanvas::GetCharInfoFromDisplayValue(const uint8_t displayValu
 		res.Char.UnicodeChar += 8;
 	}
 	return res;
+}
+
+void idConsoleCanvas::InvertLine(const int x, const int y, const int max_length) {
+	int end = min(max_length, CONSOLE_WIDTH-x);
+	for (size_t i = 0; i < end; ++i) {
+		buffer[y][x + i].Attributes ^= COMMON_LVB_REVERSE_VIDEO;
+	}
+}
+
+void idConsoleCanvas::ClearCanvas(const WORD bgColor, const WORD fgColor) {
+	CHAR_INFO charToDraw = { ' ', WORD(bgColor | fgColor)};
+	for (size_t i = 0; i < CONSOLE_HEIGHT; ++i) {
+		for (size_t j = 0; j < CONSOLE_WIDTH; ++j) {
+			buffer[i][j] = charToDraw;
+		}
+	}
 }

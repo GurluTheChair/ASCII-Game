@@ -25,6 +25,11 @@ class idViewManager {
 		std::string GetFormatedTime(const int time); // TODO: move to proper class
 		void DrawUI(const std::string &songName, const int songLength);
 		void UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes);
+		void DrawSelectUI(const std::string* levelNames, const size_t size);
+		void UpdateSelectUI(const int index, unsigned int highScore);
+		void DrawConfirmedUI(const int index);
+		void ClearUI();
+		void ClearConsole();
 	private:
 		idConsoleCanvas &canvas;
 };

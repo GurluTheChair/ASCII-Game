@@ -106,11 +106,11 @@ void idViewManager::DrawNote(const idMusicNote &note, const int lane, const floa
 void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
 	const std::string time_string = "00:00 / " + GetFormatedTime(songLength);
-	const int time_string_length = 14;
+	const int time_string_length = 13;
 
 	//Draw the Infos
-	canvas.DrawString(songName, UI_X_ORIGIN + (UI_WIDTH / 2) - (int(songName.length()) / 2), 2, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawString(time_string, UI_X_ORIGIN + (UI_WIDTH / 2) - (time_string_length / 2), 4, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(songName, UI_X_ORIGIN, 2, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(time_string, UI_X_ORIGIN, 4, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString("SCORE    ", UI_X_ORIGIN + (UI_WIDTH / 6), 8, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString("COMBO    ", UI_X_ORIGIN + (UI_WIDTH / 6), 9, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString("MISS     ", UI_X_ORIGIN + (UI_WIDTH / 6), 10, BACKGROUND_COLOR, TEXT_COLOR);
@@ -118,11 +118,70 @@ void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 
 void idViewManager::UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
-	const int time_string_length = 14;
+	const int time_string_length = 13;
 
 	//Draw the Infos
 	canvas.DrawString(GetFormatedTime(timeSinceStart), UI_X_ORIGIN + (UI_WIDTH / 2) - (time_string_length / 2), 4, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(score)+"   ", UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 8, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(comboCount)+"   ", UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 9, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(missedNotes), UI_X_ORIGIN + (UI_WIDTH / 6) + 9, 10, BACKGROUND_COLOR, TEXT_COLOR);
+}
+
+void idViewManager::DrawSelectUI(const std::string* levelNames, const size_t size) {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int UI_LIST_ORIGIN_X = UI_X_ORIGIN + 5;
+	const int UI_SCORE_TEXT_ORIGIN_Y = 8;
+	const int UI_LIST_ORIGIN_Y = UI_SCORE_TEXT_ORIGIN_Y + 6;
+	const int UI_EXIT_ORIGIN_Y = CONSOLE_HEIGHT - 5;
+
+	canvas.DrawCenteredString("SELECT A SONG", UI_X_ORIGIN, 3, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	canvas.DrawCenteredString("HIGH SCORE", UI_X_ORIGIN, UI_SCORE_TEXT_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	for (int i = 0; i < size; i++) {
+		canvas.DrawString(levelNames[i], UI_LIST_ORIGIN_X, UI_LIST_ORIGIN_Y+i, BACKGROUND_COLOR, TEXT_COLOR);
+	}
+
+	canvas.DrawCenteredString("PRESS 'ESCAPE' TO EXIT GAME", UI_X_ORIGIN, UI_EXIT_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+}
+
+void idViewManager::UpdateSelectUI(const int index, unsigned int highScore) {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int UI_ARROW_ORIGIN_X = UI_X_ORIGIN + 3;
+	const int UI_SCORE_ORIGIN_Y = 10;
+	const int UI_LIST_ORIGIN_Y = UI_SCORE_ORIGIN_Y +4;
+	const int UI_ARROW_ZONE_LENGTH = CONSOLE_HEIGHT - 5 - UI_LIST_ORIGIN_Y;
+
+	canvas.DrawCharVLine(UI_ARROW_ORIGIN_X, UI_SCORE_ORIGIN_Y+2, UI_ARROW_ZONE_LENGTH, ' ', BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawString(">", UI_ARROW_ORIGIN_X, UI_LIST_ORIGIN_Y + index, BACKGROUND_COLOR, TEXT_COLOR);
+
+	canvas.DrawCharHLine(UI_X_ORIGIN+1, UI_WIDTH-2, UI_SCORE_ORIGIN_Y, ' ', BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(std::to_string(highScore), UI_X_ORIGIN, UI_SCORE_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+}
+
+void idViewManager::DrawConfirmedUI(const int index) {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int UI_LIST_ORIGIN_Y = 14;
+	canvas.InvertLine(UI_X_ORIGIN + 1, UI_LIST_ORIGIN_Y + index, UI_WIDTH - 2);
+}
+
+void idViewManager::ClearUI() {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int TOP_WINDOW_HEIGHT = 5;
+
+	idConsoleCanvas::rectangle_t rect;
+	rect.origin_x = UI_X_ORIGIN+1;
+	rect.origin_y = 1;
+	rect.width = UI_WIDTH-2;
+	rect.height = TOP_WINDOW_HEIGHT;
+
+	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+
+	rect.origin_y = 1 + TOP_WINDOW_HEIGHT + 1;
+	rect.height = CONSOLE_HEIGHT - 3 - TOP_WINDOW_HEIGHT;
+	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+}
+
+void idViewManager::ClearConsole() {
+	canvas.ClearCanvas(BACKGROUND_COLOR, TEXT_COLOR);
 }

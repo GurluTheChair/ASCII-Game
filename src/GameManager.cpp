@@ -160,12 +160,29 @@ bool idGameManager::SelectLevelInit() {
 		return false;
 	}
 
+	// Init UI
+	view.ClearConsole();
+	view.DrawUIBorder();
+
+	std::string songNames[MAX_LEVEL_COUNT];
+	for (size_t i = 0; i < levelList.size(); i++){
+		songNames[i] = levelList[i].second;
+	}
+	view.DrawSelectUI(songNames, levelList.size());
+	view.UpdateSelectUI(
+		selectedLevelIndex,
+		score.GetHighScore(levelList[selectedLevelIndex].first)
+	);
+	view.Refresh();
+
 	return true;
 }
 
 bool idGameManager::SelectLevelUpdate() {
 	// # Handle quitting the application
 	if (input.WasKeyPressed(KeyConstants::APPLICATION_EXIT)) {
+		view.ClearConsole();
+		view.Refresh();
 		nextStep = gameStep_t::QUIT_SUCCESS;
 		return true;
 	}
@@ -173,19 +190,19 @@ bool idGameManager::SelectLevelUpdate() {
 	// # Menu navigation
 	const size_t levelCount = levelList.size();
 
-	bool playNavigateSound = false;
+	bool selectionChanged = false;
 	if (input.WasKeyPressed(KeyConstants::MENU_NEXT)) {
 		selectedLevelIndex = (selectedLevelIndex + 1) % levelCount;
-		playNavigateSound = true;
+		selectionChanged = true;
 	}
 	if (input.WasKeyPressed(KeyConstants::MENU_PREVIOUS)) {
 		selectedLevelIndex = (selectedLevelIndex + levelCount - 1) % levelCount;
-		playNavigateSound = true;
+		selectionChanged = true;
 	}
 	bool selectionConfirmed = input.WasKeyPressed(KeyConstants::MENU_CONFIRM);
 
 	// # Sound playing
-	if (playNavigateSound) {
+	if (selectionChanged) {
 		if (!sound.Play(PathConstants::Audio::Effects::MENU_NAVIGATE)) {
 			nextStep = gameStep_t::QUIT_ERROR;
 			return true;
@@ -200,11 +217,19 @@ bool idGameManager::SelectLevelUpdate() {
 	
 	// # UI Display
 	if (selectionConfirmed) {
-		// TODO : display selection confirmed UI
 		nextStep = gameStep_t::LEVEL_PLAY;
+		view.DrawConfirmedUI(selectedLevelIndex);
+		view.Refresh();
+		Sleep(1000);
 		return true;
 	} else {
-		// TODO : display selection UI
+		if (selectionChanged) {
+			view.UpdateSelectUI(
+				selectedLevelIndex,
+				score.GetHighScore(levelList[selectedLevelIndex].first)
+			);
+			view.Refresh();
+		}
 	}
 
 	return false;
@@ -239,9 +264,8 @@ bool idGameManager::PlayLevelInit() {
 
 	// Draw UI
 	const float songLength = currentLevel.GetLengthSeconds();
-	view.DrawUIBorder();
+	view.ClearUI();
 	view.DrawUI(currentLevel.GetSongName(), int(songLength));
-
 	return true;
 }
 
