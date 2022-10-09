@@ -140,6 +140,7 @@
     <ClCompile Include="src\ConsoleCanvas.cpp" />
     <ClCompile Include="src\constants\FileConstants.cpp" />
     <ClCompile Include="src\constants\InputConstants.cpp" />
+    <ClCompile Include="src\constants\SettingsConstants.cpp" />
     <ClCompile Include="src\constants\ViewConstants.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\GameLevel.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="src\ConsoleCanvas.h" />
     <ClInclude Include="src\constants\GameConstants.h" />
     <ClInclude Include="src\constants\InputConstants.h" />
+    <ClInclude Include="src\constants\SettingsConstants.h" />
     <ClInclude Include="src\constants\ViewConstants.h" />
     <ClInclude Include="src\GameLevel.h" />
     <ClInclude Include="src\GameManager.h" />

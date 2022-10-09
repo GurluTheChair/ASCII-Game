@@ -75,6 +75,9 @@
     <ClCompile Include="src\ScoreManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\constants\SettingsConstants.cpp">
+      <Filter>Fichiers sources\constants</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameLevel.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="src\ScoreManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\constants\SettingsConstants.h">
+      <Filter>Fichiers d%27en-tête\constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

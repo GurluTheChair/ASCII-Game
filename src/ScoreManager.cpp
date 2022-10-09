@@ -1,6 +1,7 @@
 #include <fstream>
 #include <utility>
 
+#include "constants/SettingsConstants.h"
 #include "ScoreManager.h"
 
 idScoreManager::idScoreManager()
@@ -65,7 +66,7 @@ void idScoreManager::RegisterPlayedNote(const idMusicNote& note) {
 	if (note.state == idMusicNote::state_t::PRESSED) {
 		comboCount++;
 		int noteValue = std::lround((note.endSeconds - note.startSeconds) * 10);
-		score += comboCount * noteValue * 100;
+		score += comboCount * noteValue * GameplaySettingsConstants::SCORE_MULTIPLIER;
 	}
 	else {
 		comboCount = 0;

@@ -4,6 +4,7 @@
 #include "constants/GameConstants.h"
 #include "constants/FileConstants.h"
 #include "constants/InputConstants.h"
+#include "constants/SettingsConstants.h"
 #include "NYTimer.h"
 #include "MusicNote.h"
 #include "GameManager.h"
@@ -253,10 +254,10 @@ void idGameManager::UpdateGameData() {
 	// # Input Management
 	currentLevel.ActivateNotesForTime(timeSinceStepStart);
 
-	const float pressEarlyTolerance = 0.1f;
-	const float pressLateTolerance = 0.1f;
-	const float releaseEarlyTolerance = 0.15f;
-	const float maxMissTimeDistance = 0.1f;
+	const float pressEarlyTolerance = GameplaySettingsConstants::EARLY_PRESS_TOLERANCE_SECONDS;
+	const float pressLateTolerance = GameplaySettingsConstants::LATE_PRESS_TOLERANCE_SECONDS;
+	const float releaseEarlyTolerance = GameplaySettingsConstants::EARLY_RELEASE_TOLERANCE_SECONDS;
+	const float maxMissTimeDistance = GameplaySettingsConstants::MAX_MISS_TIME_DISTANCE_SECONDS;
 
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 	{
