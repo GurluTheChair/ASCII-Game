@@ -24,13 +24,13 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 , levelHighScores()
 , selectedLevelIndex(0) {
 	// Register keys used in program
-	input.RegisterKey('A');
-	input.RegisterKey('Z');
-	input.RegisterKey('E');
-	input.RegisterKey('R');
-
-	if (!LoadLevelsData())
+	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
+		input.RegisterKey(KeyConstants::LANE_KEYS[i]);
+	}
+	
+	if (!LoadLevelsData()) {
 		nextStep = gameStep_t::QUIT;
+	}
 }
 
 bool idGameManager::LoadLevelsData() {
@@ -127,6 +127,7 @@ void idGameManager::PlayGameStep(std::function<bool(void)> stepInitFunc, std::fu
 	if (stepInitFunc != NULL) {
 		// If init function failed, stop step
 		if (!stepInitFunc()) {
+			nextStep = gameStep_t::QUIT;
 			return;
 		}
 	}

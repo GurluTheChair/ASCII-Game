@@ -4,7 +4,10 @@
 #include "GameConstants.h"
 
 namespace KeyConstants {
-	static const char LANE_KEYS[GAME_LANE_COUNT] = { 'A', 'Z', 'E', 'R' };
+	extern const char LANE_KEYS[GAME_LANE_COUNT];
+	extern const char MENU_PREVIOUS;
+	extern const char MENU_NEXT;
+	extern const char MENU_CONFIRM;
 }
 
 #endif

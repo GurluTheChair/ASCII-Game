@@ -20,13 +20,13 @@
 
 typedef unsigned short uint16_t;
 namespace ColorConstants {
-	static const uint16_t BACKGROUND_COLOR = 0x0000; // Color of the background
-	static const uint16_t TEXT_COLOR = 0x000F; // Color of text
-	static const uint16_t NOTE_COLOR = 0x000F; // Color of active notes
-	static const uint16_t PRESSED_COLOR = 0x000E; // Color of pressed notes
-	static const uint16_t MISSED_COLOR = 0x0008; // Color of missed notes
-	static const uint16_t LANE_COLORS_BASE[GAME_LANE_COUNT] = { 0x0001, 0x0002, 0x0004, 0x0006 };
-	static const uint16_t LANE_COLORS_INTENSIFIED[GAME_LANE_COUNT] = { 0x0009, 0x000A, 0x000C, 0x000E };
+	extern const uint16_t BACKGROUND_COLOR; // Color of the background
+	extern const uint16_t TEXT_COLOR; // Color of text
+	extern const uint16_t NOTE_COLOR; // Color of active notes
+	extern const uint16_t PRESSED_COLOR; // Color of pressed notes
+	extern const uint16_t MISSED_COLOR; // Color of missed notes
+	extern const uint16_t LANE_COLORS_BASE[GAME_LANE_COUNT]; // Base color for lanes
+	extern const uint16_t LANE_COLORS_INTENSIFIED[GAME_LANE_COUNT]; // Intensified (brighter) color for lanes
 }
 
 #endif

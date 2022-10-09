@@ -28,6 +28,9 @@
     <Filter Include="Fichiers d%27en-tête\constants">
       <UniqueIdentifier>{fdb39124-b1e3-4e84-81aa-120ce3021628}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\constants">
+      <UniqueIdentifier>{2308a8e2-14d4-4be5-a452-7dff3a6dc076}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -56,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="src\ConsoleCanvas.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\constants\FileConstants.cpp">
+      <Filter>Fichiers sources\constants</Filter>
+    </ClCompile>
+    <ClCompile Include="src\constants\InputConstants.cpp">
+      <Filter>Fichiers sources\constants</Filter>
+    </ClCompile>
+    <ClCompile Include="src\constants\ViewConstants.cpp">
+      <Filter>Fichiers sources\constants</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +118,7 @@
     <Text Include="resources\game_data\songs_list.txt">
       <Filter>Fichiers de ressources\game data</Filter>
     </Text>
-    <Text Include="resources\game_data\songs\ghost_choir.txt">
+    <Text Include="resources\game_data\songs\ghost_duet.txt">
       <Filter>Fichiers de ressources\game data\levels</Filter>
     </Text>
   </ItemGroup>

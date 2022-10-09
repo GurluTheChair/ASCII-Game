@@ -138,6 +138,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ConsoleCanvas.cpp" />
+    <ClCompile Include="src\constants\FileConstants.cpp" />
+    <ClCompile Include="src\constants\InputConstants.cpp" />
+    <ClCompile Include="src\constants\ViewConstants.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\GameLevel.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
@@ -163,7 +166,7 @@
     <ClInclude Include="src\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="resources\game_data\songs\ghost_choir.txt" />
+    <Text Include="resources\game_data\songs\ghost_duet.txt" />
     <Text Include="resources\game_data\songs\mii_channel.txt" />
     <Text Include="resources\game_data\songs_list.txt" />
   </ItemGroup>
