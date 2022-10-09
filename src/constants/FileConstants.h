@@ -16,6 +16,12 @@ namespace PathConstants {
 	namespace Audio {
 		extern const std::string DIR; // Directory path for audio
 		extern const std::string SONGS_DIR; // Directory path for audio of songs
+		extern const std::string EFFECTS_DIR; // Directory path for audio of effects
+
+		namespace Effects {
+			extern const std::string MENU_NAVIGATE; // File path for menu navigation sound effect
+			extern const std::string MENU_CONFIRM; // File path for menu confirmation sound effect
+		}
 	}
 }
 

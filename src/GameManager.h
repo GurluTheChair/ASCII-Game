@@ -47,6 +47,7 @@ class idGameManager {
 		void PlayGameStep(std::function<bool(void)> stepInitFunc, std::function<bool(void)> stepUpdateFunc);
 		bool LoadLevelsData();
 
+		bool SelectLevelInit();
 		bool SelectLevelUpdate();
 		
 		bool PlayLevelInit();

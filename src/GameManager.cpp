@@ -27,6 +27,9 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		input.RegisterKey(KeyConstants::LANE_KEYS[i]);
 	}
+	input.RegisterKey(KeyConstants::MENU_PREVIOUS);
+	input.RegisterKey(KeyConstants::MENU_NEXT);
+	input.RegisterKey(KeyConstants::MENU_CONFIRM);
 
 	// Load data about levels
 	if (!LoadLevelsData()) {
@@ -94,7 +97,7 @@ void idGameManager::StartMainLoop() {
 		// Setup Init and Update function according to next step
 		switch (nextStep) {
 			case gameStep_t::LEVEL_SELECT:
-				stepInitFunc = NULL;
+				stepInitFunc = std::bind(&idGameManager::SelectLevelInit, this);
 				stepUpdateFunc = std::bind(&idGameManager::SelectLevelUpdate, this);
 				break;
 			case gameStep_t::LEVEL_PLAY:
@@ -166,16 +169,55 @@ void idGameManager::PlayGameStep(std::function<bool(void)> stepInitFunc, std::fu
 	}
 }
 
-bool idGameManager::SelectLevelUpdate() {
-	// TODO : check up and down arrow keys
-
-	// TODO : check enter key (and return true)
-
-	// TODO : display UI
-	selectedLevelIndex = 0;
-	nextStep = gameStep_t::LEVEL_PLAY;
+bool idGameManager::SelectLevelInit() {
+	// Load menu sound effects
+	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_NAVIGATE))
+		return false;
+	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_CONFIRM))
+		return false;
 
 	return true;
+}
+
+bool idGameManager::SelectLevelUpdate() {
+	// # Menu navigation
+	const size_t levelCount = levelList.size();
+
+	bool playNavigateSound = false;
+	if (input.WasKeyPressed(KeyConstants::MENU_NEXT)) {
+		selectedLevelIndex = (selectedLevelIndex + 1) % levelCount;
+		playNavigateSound = true;
+	}
+	if (input.WasKeyPressed(KeyConstants::MENU_PREVIOUS)) {
+		selectedLevelIndex = (selectedLevelIndex + levelCount - 1) % levelCount;
+		playNavigateSound = true;
+	}
+	bool selectionConfirmed = input.WasKeyPressed(KeyConstants::MENU_CONFIRM);
+
+	// # Sound playing
+	if (playNavigateSound) {
+		if (!sound.Play(PathConstants::Audio::Effects::MENU_NAVIGATE)) {
+			nextStep = gameStep_t::QUIT;
+			return true;
+		}
+	}
+	if (selectionConfirmed) {
+		if (!sound.Play(PathConstants::Audio::Effects::MENU_CONFIRM)) {
+			nextStep = gameStep_t::QUIT;
+			return true;
+		}
+	}
+	
+	// # UI Display
+	if (selectionConfirmed) {
+		// TODO : display selection confirmed UI
+		nextStep = gameStep_t::LEVEL_PLAY;
+		return true;
+	} else {
+		// TODO : display selection UI
+	}
+
+	return false;
 }
 
 bool idGameManager::PlayLevelInit() {
