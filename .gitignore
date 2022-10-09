@@ -433,3 +433,4 @@ FodyWeavers.xsd
 # Project specific files
 built_libs/
 *.wav
+scores.txt

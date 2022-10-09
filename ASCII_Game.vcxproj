@@ -146,6 +146,7 @@
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\MusicNote.cpp" />
+    <ClCompile Include="src\ScoreManager.cpp" />
     <ClCompile Include="src\SoundManager.cpp" />
     <ClCompile Include="src\SoundUtils.cpp" />
     <ClCompile Include="src\ViewManager.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\MusicNote.h" />
     <ClInclude Include="src\NYTimer.h" />
+    <ClInclude Include="src\ScoreManager.h" />
     <ClInclude Include="src\SoundManager.h" />
     <ClInclude Include="src\SoundUtils.h" />
     <ClInclude Include="src\ViewManager.h" />
@@ -171,6 +173,8 @@
     <Text Include="resources\game_data\songs_list.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="resources\audio\effects\menu_confirm.wav" />
+    <Media Include="resources\audio\effects\menu_navigate.wav" />
     <Media Include="resources\audio\songs\ghost_duet.wav" />
     <Media Include="resources\audio\songs\mii_channel.wav" />
   </ItemGroup>

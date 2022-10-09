@@ -12,16 +12,13 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 : input(_input)
 , view(_view)
 , sound(_sound)
+, score()
 , frameRate(_frameRate)
 , deltaTime(0.0f)
 , timeSinceStepStart(0.0f)
-, comboCount(0)
-, score(0)
-, missedNotes(0)
 , currentLevelId(0)
 , nextStep(gameStep_t::LEVEL_SELECT)
 , levelList()
-, levelHighScores()
 , selectedLevelIndex(0) {
 	// Register keys used in program
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
@@ -63,28 +60,7 @@ bool idGameManager::LoadLevelsData() {
 	}
 
 	// Load high score list
-	file.close();
-	file.clear();
-	file.open(PathConstants::GameData::LEVEL_HIGH_SCORES);
-	if (!file.good() || !file.is_open()) {
-		return true; // File does not exist, do nothing
-	}
-	if (file.peek() == std::ios::traits_type::eof()) {
-		return true; // File is empty, do nothing
-	}
-
-	int levelHighScore = 0;
-	while (!file.eof()) {
-		file >> levelFileName;
-		if (file.fail()) {
-			return true; // Fail at file name retrieval, we assume it's the end of file
-		}
-		file >> levelHighScore;
-		if (file.fail()) {
-			return false; // Fail at high score retrieval, the file is invalid
-		}
-		levelHighScores[levelFileName] = levelHighScore;
-	}
+	score.LoadHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES);
 
 	return true;
 }
@@ -104,12 +80,9 @@ void idGameManager::StartMainLoop() {
 				stepInitFunc = std::bind(&idGameManager::PlayLevelInit, this);
 				stepUpdateFunc = std::bind(&idGameManager::PlayLevelUpdate, this);
 				break;
-			case gameStep_t::SCORE_SAVE:
-				// TODO : implement this
-				// TODO : remove quit
-				stepInitFunc = NULL;
-				stepUpdateFunc = NULL;
-				nextStep = gameStep_t::QUIT;
+			case gameStep_t::LEVEL_RESULTS:
+				stepInitFunc = std::bind(&idGameManager::LevelResultsInit, this);
+				stepUpdateFunc = std::bind(&idGameManager::LevelResultsUpdate, this);
 				break;
 			default:
 				stepInitFunc = NULL;
@@ -228,7 +201,6 @@ bool idGameManager::PlayLevelInit() {
 	if (!currentLevel.LoadFile(levelFilename)) {
 		return false;
 	}
-		
 
 	// Load level music data and play it
 	std::string songFilePath = PathConstants::Audio::SONGS_DIR;
@@ -242,10 +214,8 @@ bool idGameManager::PlayLevelInit() {
 		return false;
 	}
 
-	// Prepare scoring properties
-	comboCount = 0;
-	missedNotes = 0;
-	score = 0;
+	// Reset score data
+	score.Reset();
 
 	// Draw UI
 	const float songLength = currentLevel.GetLengthSeconds();
@@ -262,7 +232,7 @@ bool idGameManager::PlayLevelUpdate() {
 	if (timeSinceStepStart <= currentLevel.GetLengthSeconds()) {
 		return false;
 	} else {
-		nextStep = gameStep_t::QUIT;
+		nextStep = gameStep_t::LEVEL_RESULTS;
 		return true;
 	}
 }
@@ -320,17 +290,10 @@ void idGameManager::UpdateGameData() {
 	currentLevel.RemoveNotesForTime(timeSinceStepStart - pressLateTolerance);
 
 	// # Score Management
-	const std::vector<idMusicNote>& playedNotes = currentLevel.GetPlayedNotes();
+	const std::vector<idMusicNote> &playedNotes = currentLevel.GetPlayedNotes();
 	for (int i = 0; i < playedNotes.size(); ++i) {
-		const idMusicNote& note = playedNotes[i];
-		if (note.state == idMusicNote::state_t::PRESSED) {
-			comboCount++;
-			int noteValue = std::lround((note.endSeconds - note.startSeconds) * 10);
-			score += comboCount * noteValue * 100;
-		} else {
-			comboCount = 0;
-			missedNotes++;
-		}
+		const idMusicNote &note = playedNotes[i];
+		score.RegisterPlayedNote(note);
 	}
 	currentLevel.ClearPlayedNotes();
 }
@@ -352,9 +315,27 @@ void idGameManager::UpdateGameView() {
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		heldKeys[i] = input.WasKeyHeld(KeyConstants::LANE_KEYS[i]);
 	}
-
 	view.DrawBottomBar(heldKeys);
-	view.UpdateUI(int(timeSinceStepStart), score, comboCount, missedNotes);
+
+	// Draw UI
+	view.UpdateUI(int(timeSinceStepStart), score.GetScore(), score.GetComboCount(), score.GetMissedNotesCount());
 
 	view.Refresh();
+}
+
+bool idGameManager::LevelResultsInit() {
+	if (score.CheckForHighScore(levelList[selectedLevelIndex].first)) {
+		if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool idGameManager::LevelResultsUpdate() {
+	// TODO: display results and wait for a press
+
+	nextStep = gameStep_t::LEVEL_SELECT;
+	return true;
 }
