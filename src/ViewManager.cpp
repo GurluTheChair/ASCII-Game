@@ -108,7 +108,7 @@ void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 	const std::string time_string = "00:00 / " + GetFormatedTime(songLength);
 	const int time_string_length = 13;
 
-	//Draw the Infos
+	// Draw the Infos
 	canvas.DrawCenteredString(songName, UI_X_ORIGIN, 2, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawCenteredString(time_string, UI_X_ORIGIN, 4, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString("SCORE    ", UI_X_ORIGIN + (UI_WIDTH / 6), 8, BACKGROUND_COLOR, TEXT_COLOR);
@@ -145,7 +145,7 @@ void idViewManager::DrawSelectUI(const std::string* levelNames, const size_t siz
 	canvas.DrawCenteredString("PRESS 'ESCAPE' TO EXIT GAME", UI_X_ORIGIN, UI_EXIT_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 }
 
-void idViewManager::UpdateSelectUI(const int index, unsigned int highScore) {
+void idViewManager::UpdateSelectUI(const size_t index, unsigned int highScore) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
 	const int UI_ARROW_ORIGIN_X = UI_X_ORIGIN + 3;
 	const int UI_SCORE_ORIGIN_Y = 10;
@@ -153,16 +153,16 @@ void idViewManager::UpdateSelectUI(const int index, unsigned int highScore) {
 	const int UI_ARROW_ZONE_LENGTH = CONSOLE_HEIGHT - 5 - UI_LIST_ORIGIN_Y;
 
 	canvas.DrawCharVLine(UI_ARROW_ORIGIN_X, UI_SCORE_ORIGIN_Y+2, UI_ARROW_ZONE_LENGTH, ' ', BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawString(">", UI_ARROW_ORIGIN_X, UI_LIST_ORIGIN_Y + index, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawString(">", UI_ARROW_ORIGIN_X, int(UI_LIST_ORIGIN_Y + index), BACKGROUND_COLOR, TEXT_COLOR);
 
 	canvas.DrawCharHLine(UI_X_ORIGIN+1, UI_WIDTH-2, UI_SCORE_ORIGIN_Y, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawCenteredString(std::to_string(highScore), UI_X_ORIGIN, UI_SCORE_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 }
 
-void idViewManager::DrawConfirmedUI(const int index) {
+void idViewManager::DrawConfirmedUI(const size_t index) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
 	const int UI_LIST_ORIGIN_Y = 14;
-	canvas.InvertLine(UI_X_ORIGIN + 1, UI_LIST_ORIGIN_Y + index, UI_WIDTH - 2);
+	canvas.InvertLine(UI_X_ORIGIN + 1, int(UI_LIST_ORIGIN_Y + index), UI_WIDTH - 2);
 }
 
 void idViewManager::ClearUI() {
@@ -174,14 +174,13 @@ void idViewManager::ClearUI() {
 	rect.origin_y = 1;
 	rect.width = UI_WIDTH-2;
 	rect.height = TOP_WINDOW_HEIGHT;
-
-	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 
 	rect.origin_y = 1 + TOP_WINDOW_HEIGHT + 1;
 	rect.height = CONSOLE_HEIGHT - 3 - TOP_WINDOW_HEIGHT;
-	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 }
 
 void idViewManager::ClearConsole() {
-	canvas.ClearCanvas(BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.ClearCanvas(BACKGROUND_COLOR, BACKGROUND_COLOR);
 }

@@ -26,8 +26,8 @@ class idViewManager {
 		void DrawUI(const std::string &songName, const int songLength);
 		void UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes);
 		void DrawSelectUI(const std::string* levelNames, const size_t size);
-		void UpdateSelectUI(const int index, unsigned int highScore);
-		void DrawConfirmedUI(const int index);
+		void UpdateSelectUI(const size_t index, unsigned int highScore);
+		void DrawConfirmedUI(const size_t index);
 		void ClearUI();
 		void ClearConsole();
 	private:

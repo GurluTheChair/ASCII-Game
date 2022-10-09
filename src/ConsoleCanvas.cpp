@@ -87,7 +87,7 @@ void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const i
 
 void idConsoleCanvas::DrawCenteredString(const std::string& toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor) {
 	if (toDraw.length() < max_length) {
-		int centered_x = x + (max_length / 2) - (toDraw.length() / 2);
+		int centered_x = x + (max_length / 2) - int(toDraw.length() / 2);
 		DrawString(toDraw, centered_x, y, bgColor,fgColor);
 	}
 }
@@ -122,7 +122,8 @@ void idConsoleCanvas::InvertLine(const int x, const int y, const int max_length)
 }
 
 void idConsoleCanvas::ClearCanvas(const WORD bgColor, const WORD fgColor) {
-	CHAR_INFO charToDraw = { ' ', WORD(bgColor | fgColor)};
+	CHAR_INFO charToDraw = { ' ', WORD(bgColor | fgColor) };
+
 	for (size_t i = 0; i < CONSOLE_HEIGHT; ++i) {
 		for (size_t j = 0; j < CONSOLE_WIDTH; ++j) {
 			buffer[i][j] = charToDraw;

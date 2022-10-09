@@ -162,6 +162,7 @@ bool idGameManager::SelectLevelInit() {
 
 	// Init UI
 	view.ClearConsole();
+	view.ClearUI();
 	view.DrawUIBorder();
 
 	std::string songNames[MAX_LEVEL_COUNT];
