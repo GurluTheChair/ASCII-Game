@@ -30,7 +30,7 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 
 	// Load data about levels
 	if (!LoadLevelsData()) {
-		nextStep = gameStep_t::QUIT;
+		nextStep = gameStep_t::QUIT_ERROR;
 	}
 }
 
@@ -65,11 +65,11 @@ bool idGameManager::LoadLevelsData() {
 	return true;
 }
 
-void idGameManager::StartMainLoop() {
+int idGameManager::StartMainLoop() {
 	std::function<bool(void)> stepInitFunc = NULL;
 	std::function<bool(void)> stepUpdateFunc = NULL;
 
-	while (nextStep != gameStep_t::QUIT) {
+	while ((nextStep != gameStep_t::QUIT_SUCCESS) && (nextStep != gameStep_t::QUIT_ERROR)) {
 		// Setup Init and Update function according to next step
 		switch (nextStep) {
 			case gameStep_t::LEVEL_SELECT:
@@ -87,11 +87,16 @@ void idGameManager::StartMainLoop() {
 			default:
 				stepInitFunc = NULL;
 				stepUpdateFunc = NULL;
-				nextStep = gameStep_t::QUIT;
 				break;
 		}
 		// Play next game step
 		PlayGameStep(stepInitFunc, stepUpdateFunc);
+	}
+
+	if (nextStep == gameStep_t::QUIT_SUCCESS) {
+		return EXIT_SUCCESS;
+	} else {
+		return EXIT_FAILURE;
 	}
 }
 
@@ -104,7 +109,7 @@ void idGameManager::PlayGameStep(std::function<bool(void)> stepInitFunc, std::fu
 	if (stepInitFunc != NULL) {
 		// If init function failed, stop step
 		if (!stepInitFunc()) {
-			nextStep = gameStep_t::QUIT;
+			nextStep = gameStep_t::QUIT_ERROR;
 			return;
 		}
 	}
@@ -144,10 +149,14 @@ void idGameManager::PlayGameStep(std::function<bool(void)> stepInitFunc, std::fu
 
 bool idGameManager::SelectLevelInit() {
 	// Load menu sound effects
-	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_NAVIGATE))
+	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_NAVIGATE)) {
+		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
-	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_CONFIRM))
+	}
+	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_CONFIRM)) {
+		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
+	}
 
 	return true;
 }
@@ -170,13 +179,13 @@ bool idGameManager::SelectLevelUpdate() {
 	// # Sound playing
 	if (playNavigateSound) {
 		if (!sound.Play(PathConstants::Audio::Effects::MENU_NAVIGATE)) {
-			nextStep = gameStep_t::QUIT;
+			nextStep = gameStep_t::QUIT_ERROR;
 			return true;
 		}
 	}
 	if (selectionConfirmed) {
 		if (!sound.Play(PathConstants::Audio::Effects::MENU_CONFIRM)) {
-			nextStep = gameStep_t::QUIT;
+			nextStep = gameStep_t::QUIT_ERROR;
 			return true;
 		}
 	}
@@ -199,6 +208,7 @@ bool idGameManager::PlayLevelInit() {
 	levelFilename.append(levelList[selectedLevelIndex].first);
 
 	if (!currentLevel.LoadFile(levelFilename)) {
+		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
 	}
 
@@ -207,10 +217,12 @@ bool idGameManager::PlayLevelInit() {
 	songFilePath.append(currentLevel.GetSongFilename());
 
 	if (!sound.LoadWav(songFilePath)) {
+		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
 	}
 
 	if (!sound.Play(songFilePath)) {
+		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
 	}
 
@@ -326,6 +338,7 @@ void idGameManager::UpdateGameView() {
 bool idGameManager::LevelResultsInit() {
 	if (score.CheckForHighScore(levelList[selectedLevelIndex].first)) {
 		if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
+			nextStep = gameStep_t::QUIT_ERROR;
 			return false;
 		}
 	}
@@ -335,7 +348,6 @@ bool idGameManager::LevelResultsInit() {
 
 bool idGameManager::LevelResultsUpdate() {
 	// TODO: display results and wait for a press
-
 	nextStep = gameStep_t::LEVEL_SELECT;
 	return true;
 }

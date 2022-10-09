@@ -16,7 +16,5 @@ int main(void) {
 	idSoundManager sound;
 	idGameManager game(input, view, sound, 60.0);
 
-	game.StartMainLoop();
-
-	return 0;
+	return game.StartMainLoop();
 }

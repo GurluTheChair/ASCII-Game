@@ -15,15 +15,15 @@
 class idGameManager {
 	public:
 		idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate);
-		void StartMainLoop();
+		int StartMainLoop();
 	private:
 		// Step of the game
 		enum class gameStep_t { 
 			LEVEL_SELECT, // Selecting a level to play
 			LEVEL_PLAY, // Playing a level (a song)
 			LEVEL_RESULTS, // Display results for played level
-			QUIT // Quitting the application (with success
-			// TODO : add error step to quit with error
+			QUIT_SUCCESS, // Quitting the application (with success)
+			QUIT_ERROR // Quitting the application (with error)
 		};
 
 		int currentLevelId;
