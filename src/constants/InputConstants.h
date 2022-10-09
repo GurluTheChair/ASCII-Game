@@ -8,6 +8,7 @@ namespace KeyConstants {
 	extern const char MENU_PREVIOUS;
 	extern const char MENU_NEXT;
 	extern const char MENU_CONFIRM;
+	extern const char APPLICATION_EXIT;
 }
 
 #endif

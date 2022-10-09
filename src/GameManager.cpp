@@ -28,6 +28,7 @@ idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSou
 	input.RegisterKey(KeyConstants::MENU_PREVIOUS);
 	input.RegisterKey(KeyConstants::MENU_NEXT);
 	input.RegisterKey(KeyConstants::MENU_CONFIRM);
+	input.RegisterKey(KeyConstants::APPLICATION_EXIT);
 
 	// Load data about levels
 	if (!LoadLevelsData()) {
@@ -163,6 +164,12 @@ bool idGameManager::SelectLevelInit() {
 }
 
 bool idGameManager::SelectLevelUpdate() {
+	// # Handle quitting the application
+	if (input.WasKeyPressed(KeyConstants::APPLICATION_EXIT)) {
+		nextStep = gameStep_t::QUIT_SUCCESS;
+		return true;
+	}
+
 	// # Menu navigation
 	const size_t levelCount = levelList.size();
 
