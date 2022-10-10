@@ -1,4 +1,2 @@
 ghost_duet.txt Ghost Duet
 mii_channel.txt Mii Channel Theme
-mii_channel.txt Mii Channel Theme Two
-mii_channel.txt Mii Channel Theme Three
