@@ -14,8 +14,8 @@ idViewManager::idViewManager(idConsoleCanvas &_canvas) : canvas(_canvas) { }
 
 void idViewManager::ClearNotesArea() {
 	idConsoleCanvas::rectangle_t rect;
-	rect.origin_x = 0;
-	rect.origin_y = 0;
+	rect.originX = 0;
+	rect.originY = 0;
 	rect.width = NOTES_AREA_WIDTH;
 	rect.height = CONSOLE_HEIGHT;
 
@@ -32,11 +32,11 @@ void idViewManager::DrawBottomBar(bool *inputsHeld) {
 	rect.width = LANE_WIDTH;
 	
 	for (int i = 0; i < GAME_LANE_COUNT; i++) {
-		rect.origin_x = i * LANE_WIDTH;
-		rect.origin_y = CONSOLE_HEIGHT - 2;
+		rect.originX = i * LANE_WIDTH;
+		rect.originY = CONSOLE_HEIGHT - 2;
 		canvas.DrawCharRectangle(rect, 0x2584, 0x00F0,
 			(inputsHeld[i]) ? LANE_COLORS_BASE[i] : (BACKGROUND_COLOR << 4));
-		rect.origin_y = CONSOLE_HEIGHT - 1;
+		rect.originY = CONSOLE_HEIGHT - 1;
 		canvas.DrawCharRectangle(rect, KeyConstants::LANE_KEYS[i],
 			(inputsHeld[i]) ? (LANE_COLORS_BASE[i] << 4) : (BACKGROUND_COLOR << 4),
 			(inputsHeld[i]) ? TEXT_COLOR : LANE_COLORS_BASE[i]);
@@ -81,8 +81,8 @@ void idViewManager::DrawNote(const idMusicNote &note, const int lane, const floa
 	idConsoleCanvas::subpixelRectangle_t rect;
 	const int LANE_HEIGHT = CONSOLE_HEIGHT - 3;
 
-	rect.origin_x = lane * LANE_WIDTH;
-	rect.origin_y = LANE_HEIGHT * (1 + ((time - note.startSeconds) / laneLengthSeconds));
+	rect.originX = lane * LANE_WIDTH;
+	rect.originY = LANE_HEIGHT * (1 + ((time - note.startSeconds) / laneLengthSeconds));
 	rect.width = LANE_WIDTH;
 	rect.height = LANE_HEIGHT * ((note.endSeconds - note.startSeconds) / laneLengthSeconds);
 
@@ -107,15 +107,13 @@ void idViewManager::DrawNote(const idMusicNote &note, const int lane, const floa
 
 void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
-	const std::string time_string = "00:00 / " + GetFormatedTime(songLength);
-	const int time_string_length = 13;
+	const std::string TIME_STRING = "00:00 / " + GetFormatedTime(songLength);
 	const int INFO_STRING_X = UI_X_ORIGIN + (UI_WIDTH / 6);
 	const int INFO_STRING_LENGTH = 9;
 
-
 	// Draw the Infos
 	canvas.DrawCenteredString(songName, UI_X_ORIGIN, 2, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawCenteredString(time_string, UI_X_ORIGIN, 4, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(TIME_STRING, UI_X_ORIGIN, 4, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawStringN(LevelPlay::SCORE_TITLE, INFO_STRING_X, 8, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawStringN(LevelPlay::COMBO_COUNT_TITLE, INFO_STRING_X, 9, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawStringN(LevelPlay::MISSED_NOTES_COUNT_TITLE, INFO_STRING_X, 10, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
@@ -123,11 +121,11 @@ void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 
 void idViewManager::UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
-	const int time_string_length = 13;
+	const int TIME_STRING_LENGTH = 13;
 	const int INFO_DATA_X = UI_X_ORIGIN + (UI_WIDTH / 6) + 9;
 
 	//Draw the Infos
-	canvas.DrawString(GetFormatedTime(timeSinceStart), UI_X_ORIGIN + (UI_WIDTH / 2) - (time_string_length / 2), 4, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawString(GetFormatedTime(timeSinceStart), UI_X_ORIGIN + (UI_WIDTH / 2) - (TIME_STRING_LENGTH / 2), 4, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(score), INFO_DATA_X, 8, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(comboCount)+"     ", INFO_DATA_X, 9, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawString(std::to_string(missedNotes), INFO_DATA_X, 10, BACKGROUND_COLOR, TEXT_COLOR);
@@ -182,13 +180,13 @@ void idViewManager::ClearUI() {
 	const int TOP_WINDOW_HEIGHT = 5;
 
 	idConsoleCanvas::rectangle_t rect;
-	rect.origin_x = UI_X_ORIGIN+1;
-	rect.origin_y = 1;
+	rect.originX = UI_X_ORIGIN+1;
+	rect.originY = 1;
 	rect.width = UI_WIDTH-2;
 	rect.height = TOP_WINDOW_HEIGHT;
 	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 
-	rect.origin_y = 1 + TOP_WINDOW_HEIGHT + 1;
+	rect.originY = 1 + TOP_WINDOW_HEIGHT + 1;
 	rect.height = CONSOLE_HEIGHT - 3 - TOP_WINDOW_HEIGHT;
 	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 }

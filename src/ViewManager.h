@@ -8,13 +8,6 @@
 
 class idViewManager {
 	public:
-		struct rectangle_t {
-			int origin_x;
-			float origin_y;
-			int width;
-			float height;
-		};
-
 		idViewManager(idConsoleCanvas &_canvas);
 		
 		void ClearNotesArea();

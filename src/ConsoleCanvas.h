@@ -9,14 +9,14 @@
 class idConsoleCanvas {
 	public:
 		struct subpixelRectangle_t {
-			int origin_x;
-			float origin_y;
+			int originX;
+			float originY;
 			int width;
 			float height;
 		};
 
 		struct rectangle_t {
-			int origin_x, origin_y, width, height;
+			int originX, originY, width, height;
 		};
 
 		idConsoleCanvas(const HANDLE &_outputHandle);
@@ -28,9 +28,9 @@ class idConsoleCanvas {
 		void DrawCharHLine(const int startX, const int xLength, const int y, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor);
 		void DrawString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor);
 		void DrawStringN(const std::string &toDraw, const int x, const int y, const int size, const WORD bgColor, const WORD fgColor);
-		void DrawCenteredString(const std::string &toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor);
-		void DrawMultilineString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered = false, const int max_length = 0);
-		void InvertLine(const int x, const int y, const int max_length);
+		void DrawCenteredString(const std::string &toDraw, const int x, const int y, const int maxLength, const WORD bgColor, const WORD fgColor);
+		void DrawMultilineString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered = false, const int maxLength = 0);
+		void InvertLine(const int x, const int y, const int maxLength);
 		void ClearCanvas(const WORD bgColor, const WORD fgColor);
 
 	private:

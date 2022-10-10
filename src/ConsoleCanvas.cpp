@@ -17,32 +17,32 @@ void idConsoleCanvas::SetCursorVisible(const bool visible) {
 }
 
 void idConsoleCanvas::DrawSubpixelRectangle(const subpixelRectangle_t &rect, const WORD bgColor, const WORD fgColor) {
-	int bottomY = int(floor(rect.origin_y));
-	int topY = int(floor(rect.origin_y - rect.height));
+	int bottomY = int(floor(rect.originY));
+	int topY = int(floor(rect.originY - rect.height));
 
 	// Draw bottom of "subpixel" rectangle (if necessary)
 	if (bottomY >= 0 && bottomY < CONSOLE_HEIGHT) {
-		int displayValue = lround((rect.origin_y - bottomY) * 7);
+		int displayValue = lround((rect.originY - bottomY) * 7);
 		CHAR_INFO bottomChar = GetCharInfoFromDisplayValue(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rect.width; i++) {
-			buffer[bottomY][rect.origin_x + i] = bottomChar;
+			buffer[bottomY][rect.originX + i] = bottomChar;
 		}
 	}
 
 	// Draw middle of "subpixel" rectangle (if necessary)
 	for (int i = min(bottomY - 1, CONSOLE_HEIGHT - 1); ((i > topY) && (i >= 0)); i--) {
 		CHAR_INFO middleChar = GetCharInfoFromDisplayValue(8, bgColor, fgColor);
-		for (size_t j = rect.origin_x; j < rect.origin_x + rect.width; j++) {
+		for (size_t j = rect.originX; j < rect.originX + rect.width; j++) {
 			buffer[i][j] = middleChar;
 		}
 	}
 
 	// Draw top of "subpixel" rectangle (if necessary)
 	if (topY >= 0 && topY < CONSOLE_HEIGHT) {
-		int displayValue = lround((rect.origin_y - rect.height - topY) * 7) + 8;
+		int displayValue = lround((rect.originY - rect.height - topY) * 7) + 8;
 		CHAR_INFO topChar = GetCharInfoFromDisplayValue(displayValue, bgColor, fgColor);
 		for (size_t i = 0; i < rect.width; i++) {
-			buffer[topY][rect.origin_x + i] = topChar;
+			buffer[topY][rect.originX + i] = topChar;
 		}
 	}
 }
@@ -54,8 +54,8 @@ void idConsoleCanvas::Refresh() {
 void idConsoleCanvas::DrawCharRectangle(const rectangle_t &rect, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor) {
 	CHAR_INFO charToDraw = { unicodeChar, WORD(bgColor | fgColor) };
 
-	for (int y = rect.origin_y; y < rect.origin_y + rect.height; ++y) {
-		for (int x = rect.origin_x; x < rect.origin_x + rect.width; ++x) {
+	for (int y = rect.originY; y < rect.originY + rect.height; ++y) {
+		for (int x = rect.originX; x < rect.originX + rect.width; ++x) {
 			buffer[y][x] = charToDraw;
 		}
 	}
@@ -101,16 +101,16 @@ void idConsoleCanvas::DrawStringN(const std::string &toDraw, const int x, const 
 	}
 }
 
-void idConsoleCanvas::DrawCenteredString(const std::string &toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor) {
-	if (toDraw.length() <= max_length) {
-		int centered_x = x + (max_length / 2) - int(toDraw.length() / 2);
-		DrawString(toDraw, centered_x, y, bgColor,fgColor);
+void idConsoleCanvas::DrawCenteredString(const std::string &toDraw, const int x, const int y, const int maxLength, const WORD bgColor, const WORD fgColor) {
+	if (toDraw.length() <= maxLength) {
+		int centeredX = x + (maxLength / 2) - int(toDraw.length() / 2);
+		DrawString(toDraw, centeredX, y, bgColor,fgColor);
 	} else {
-		DrawString(toDraw.substr(0, max_length), x, y, bgColor, fgColor);
+		DrawString(toDraw.substr(0, maxLength), x, y, bgColor, fgColor);
 	}
 }
 
-void idConsoleCanvas::DrawMultilineString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered, const int max_length) {
+void idConsoleCanvas::DrawMultilineString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered, const int maxLength) {
 	std::stringstream multiline(toDraw);
 	std::string line;
 
@@ -119,7 +119,7 @@ void idConsoleCanvas::DrawMultilineString(const std::string &toDraw, const int x
 		if (!centered) {
 			DrawString(line, x, lineY, bgColor, fgColor);
 		} else {
-			DrawCenteredString(line, x, lineY, max_length, bgColor, fgColor);
+			DrawCenteredString(line, x, lineY, maxLength, bgColor, fgColor);
 		}
 		lineY++;
 	}
@@ -147,8 +147,8 @@ CHAR_INFO idConsoleCanvas::GetCharInfoFromDisplayValue(const uint8_t displayValu
 	return res;
 }
 
-void idConsoleCanvas::InvertLine(const int x, const int y, const int max_length) {
-	int end = min(max_length, CONSOLE_WIDTH-x);
+void idConsoleCanvas::InvertLine(const int x, const int y, const int maxLength) {
+	int end = min(maxLength, CONSOLE_WIDTH-x);
 	for (size_t i = 0; i < end; ++i) {
 		buffer[y][x + i].Attributes ^= COMMON_LVB_REVERSE_VIDEO;
 	}
