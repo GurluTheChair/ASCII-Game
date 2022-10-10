@@ -10,7 +10,7 @@ class idMusicNote {
 			PRESSED,
 			MISSED
 		};
-		friend std::istream& operator>>(std::istream& is, idMusicNote& note);
+		friend std::istream& operator>>(std::istream &is, idMusicNote &note);
 
 		int column;
 		float startSeconds;

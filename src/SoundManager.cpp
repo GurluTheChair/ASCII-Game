@@ -28,7 +28,7 @@ idSoundManager::~idSoundManager() {
 		alDeleteSources((ALsizei)playingSources.size(), &playingSources[0]);
 	}
 
-	for (std::pair<const std::string, ALuint>& p : registeredBuffers) {
+	for (std::pair<const std::string, ALuint> &p : registeredBuffers) {
 		alDeleteBuffers(1, &p.second);
 	}
 

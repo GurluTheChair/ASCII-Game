@@ -11,7 +11,7 @@ idScoreManager::idScoreManager()
 , score(0)
 , levelHighScores() {}
 
-bool idScoreManager::LoadHighScores(const std::string& fileName) {
+bool idScoreManager::LoadHighScores(const std::string &fileName) {
 	std::ifstream file(fileName);
 	if (!file.good() || !file.is_open()) {
 		return true; // File does not exist, do nothing
@@ -38,7 +38,7 @@ bool idScoreManager::LoadHighScores(const std::string& fileName) {
 	return true;
 }
 
-bool idScoreManager::SaveHighScores(const std::string& fileName) const {
+bool idScoreManager::SaveHighScores(const std::string &fileName) const {
 	std::ofstream file(fileName);
 	if (!file.good() || !file.is_open()) {
 		return false; // File could not be opened
@@ -61,7 +61,7 @@ void idScoreManager::Reset() {
 	score = 0;
 }
 
-void idScoreManager::RegisterPlayedNote(const idMusicNote& note) {
+void idScoreManager::RegisterPlayedNote(const idMusicNote &note) {
 	// TODO: replace 100 with game constant
 	if (note.state == idMusicNote::state_t::PRESSED) {
 		comboCount++;
@@ -85,7 +85,7 @@ const bool idScoreManager::CheckForHighScore(const std::string &levelFileName) {
 	return isNewHighScore;
 }
 
-const unsigned int idScoreManager::GetHighScore(const std::string& levelFileName) const {
+const unsigned int idScoreManager::GetHighScore(const std::string &levelFileName) const {
 	if (levelHighScores.count(levelFileName) <= 0) {
 		return 0;
 	} else {

@@ -1,6 +1,6 @@
 #include "MusicNote.h"
 
-std::istream& operator>>(std::istream& is, idMusicNote& note) {
+std::istream& operator>>(std::istream &is, idMusicNote &note) {
 	is >> note.column;
 	is >> note.startSeconds;
 	is >> note.endSeconds;

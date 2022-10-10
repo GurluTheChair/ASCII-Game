@@ -26,8 +26,8 @@ class idInputManager {
 	private:
 		std::unordered_map<int, short> keyStates;
 		void ResetKeyState(const int virtualKey);
-		idInputManager(const idInputManager& other) = delete;
-		idInputManager& operator=(const idInputManager& other) = delete;
+		idInputManager(const idInputManager &other) = delete;
+		idInputManager& operator=(const idInputManager &other) = delete;
 };
 
 #endif

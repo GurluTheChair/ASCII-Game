@@ -12,7 +12,7 @@ class idGameLevel {
 	public:
 		idGameLevel() = default;
 		
-		bool LoadFile(const std::string& levelFilename);
+		bool LoadFile(const std::string &levelFilename);
 		void ActivateNotesForTime(const float time);
 		void RemoveNotesForTime(const float time);
 

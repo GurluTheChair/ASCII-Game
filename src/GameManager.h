@@ -14,7 +14,7 @@
 
 class idGameManager {
 	public:
-		idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate);
+		idGameManager(idInputManager &_input, idViewManager &_view, idSoundManager &_sound, const float _frameRate);
 		int StartMainLoop();
 	private:
 		// Step of the game

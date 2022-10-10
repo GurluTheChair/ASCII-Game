@@ -100,7 +100,7 @@ static bool LoadWavFileHeader(
 // Load WAVE file following the specification : http://soundfile.sapp.org/doc/WaveFormat/
 // (only works for files following the canonical WAVE format with 2 subchunks)
 char* LoadWavFile(
-	const std::string& fileName, 
+	const std::string &fileName, 
 	int32_t &numChannels,
 	int32_t &sampleRate,
 	int32_t &bitsPerSample,

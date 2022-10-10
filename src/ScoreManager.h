@@ -16,7 +16,7 @@ class idScoreManager {
 		void RegisterPlayedNote(const idMusicNote &note);
 		const bool CheckForHighScore(const std::string &levelFileName);
 		
-		const unsigned int GetHighScore(const std::string& levelFileName) const;
+		const unsigned int GetHighScore(const std::string &levelFileName) const;
 		const unsigned int GetComboCount() const;
 		const unsigned int GetMissedNotesCount() const;
 		const unsigned int GetPlayedNotesCount() const;

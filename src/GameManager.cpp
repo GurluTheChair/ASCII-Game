@@ -9,7 +9,7 @@
 #include "MusicNote.h"
 #include "GameManager.h"
 
-idGameManager::idGameManager(idInputManager& _input, idViewManager& _view, idSoundManager& _sound, const float _frameRate)
+idGameManager::idGameManager(idInputManager &_input, idViewManager &_view, idSoundManager &_sound, const float _frameRate)
 : input(_input)
 , view(_view)
 , sound(_sound)
@@ -346,11 +346,11 @@ void idGameManager::UpdateGameData() {
 void idGameManager::UpdateGameView() {
 	// Draw notes
 	view.ClearNotesArea();
-	const float& laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
+	const float &laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
 	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
 		const std::deque<idMusicNote> &laneNotes = currentLevel.GetReadonlyActiveNotes(lane);
 		for (int i = 0; i < laneNotes.size(); ++i) {
-			const idMusicNote& note = laneNotes[i];
+			const idMusicNote &note = laneNotes[i];
 			view.DrawNote(note, lane, laneLengthSeconds, timeSinceStepStart);
 		}
 	}
