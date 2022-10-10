@@ -78,6 +78,9 @@
     <ClCompile Include="src\constants\SettingsConstants.cpp">
       <Filter>Fichiers sources\constants</Filter>
     </ClCompile>
+    <ClCompile Include="src\constants\StringConstants.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameLevel.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="src\constants\SettingsConstants.h">
       <Filter>Fichiers d%27en-tête\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="src\constants\StringConstants.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

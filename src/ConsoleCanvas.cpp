@@ -85,10 +85,30 @@ void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const i
 	}
 }
 
+void idConsoleCanvas::DrawStringN(const std::string &toDraw, const int x, const int y, const int size, const WORD bgColor, const WORD fgColor) {
+	CHAR_INFO res;
+	res.Attributes = bgColor | fgColor;
+
+	size_t toDrawLength = toDraw.length();
+	for (size_t i = 0; (i < size) && (i < CONSOLE_WIDTH); ++i) {
+		if (i < toDrawLength) {
+			res.Char.UnicodeChar = toDraw[i];
+		} else {
+			res.Char.UnicodeChar = ' ';
+		}
+		buffer[y][x + i] = res;
+	}
+}
+
 void idConsoleCanvas::DrawCenteredString(const std::string& toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor) {
-	if (toDraw.length() < max_length) {
+	if (toDraw.length() <= max_length) {
 		int centered_x = x + (max_length / 2) - int(toDraw.length() / 2);
 		DrawString(toDraw, centered_x, y, bgColor,fgColor);
+	} else {
+		DrawString(toDraw.substr(0, max_length), x, y, bgColor, fgColor);
+	}
+}
+
 	}
 }
 
