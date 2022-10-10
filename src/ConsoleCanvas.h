@@ -29,6 +29,7 @@ class idConsoleCanvas {
 		void DrawString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor);
 		void DrawStringN(const std::string& toDraw, const int x, const int y, const int size, const WORD bgColor, const WORD fgColor);
 		void DrawCenteredString(const std::string& toDraw, const int x, const int y, const int max_length, const WORD bgColor, const WORD fgColor);
+		void DrawMultilineString(const std::string& toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered = false, const int max_length = 0);
 		void InvertLine(const int x, const int y, const int max_length);
 		void ClearCanvas(const WORD bgColor, const WORD fgColor);
 

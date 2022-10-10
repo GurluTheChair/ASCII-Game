@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <sstream>
 
 #include "ConsoleCanvas.h"
 
@@ -109,6 +110,18 @@ void idConsoleCanvas::DrawCenteredString(const std::string& toDraw, const int x,
 	}
 }
 
+void idConsoleCanvas::DrawMultilineString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor, const bool centered, const int max_length) {
+	std::stringstream multiline(toDraw);
+	std::string line;
+
+	int lineY = y;
+	while (!(std::getline(multiline, line).fail())) {
+		if (!centered) {
+			DrawString(line, x, lineY, bgColor, fgColor);
+		} else {
+			DrawCenteredString(line, x, lineY, max_length, bgColor, fgColor);
+		}
+		lineY++;
 	}
 }
 
