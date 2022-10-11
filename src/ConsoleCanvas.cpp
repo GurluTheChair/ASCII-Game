@@ -52,7 +52,7 @@ void idConsoleCanvas::Refresh() {
 }
 
 void idConsoleCanvas::DrawCharRectangle(const rectangle_t &rect, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor) {
-	CHAR_INFO charToDraw = { unicodeChar, WORD(bgColor | fgColor) };
+	CHAR_INFO charToDraw = { unicodeChar, WORD((bgColor << 4) | fgColor) };
 
 	for (int y = rect.originY; y < rect.originY + rect.height; ++y) {
 		for (int x = rect.originX; x < rect.originX + rect.width; ++x) {
@@ -62,7 +62,7 @@ void idConsoleCanvas::DrawCharRectangle(const rectangle_t &rect, const WCHAR uni
 }
 
 void idConsoleCanvas::DrawCharVLine(const int x, const int startY, const int yLength, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor) {
-	CHAR_INFO charToDraw = { unicodeChar, WORD(bgColor | fgColor) };
+	CHAR_INFO charToDraw = { unicodeChar, WORD((bgColor << 4) | fgColor) };
 
 	for (int y = startY; y < startY + yLength; ++y) {
 		buffer[y][x] = charToDraw;
@@ -70,7 +70,7 @@ void idConsoleCanvas::DrawCharVLine(const int x, const int startY, const int yLe
 }
 
 void idConsoleCanvas::DrawCharHLine(const int startX, const int xLength, const int y, const WCHAR unicodeChar, const WORD bgColor, const WORD fgColor) {
-	CHAR_INFO charToDraw = { unicodeChar, WORD(bgColor | fgColor) };
+	CHAR_INFO charToDraw = { unicodeChar, WORD((bgColor << 4) | fgColor) };
 
 	for (int x = startX; x < startX + xLength; ++x) {
 		buffer[y][x] = charToDraw;
@@ -79,7 +79,7 @@ void idConsoleCanvas::DrawCharHLine(const int startX, const int xLength, const i
 
 void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const int y, const WORD bgColor, const WORD fgColor) {
 	CHAR_INFO res;
-	res.Attributes = bgColor | fgColor;
+	res.Attributes = (bgColor << 4) | fgColor;
 	for (size_t i = 0; (i < toDraw.length()) && (i < CONSOLE_WIDTH); ++i) {
 		res.Char.UnicodeChar = toDraw[i];
 		buffer[y][x + i] = res;
@@ -88,7 +88,7 @@ void idConsoleCanvas::DrawString(const std::string &toDraw, const int x, const i
 
 void idConsoleCanvas::DrawStringN(const std::string &toDraw, const int x, const int y, const int size, const WORD bgColor, const WORD fgColor) {
 	CHAR_INFO res;
-	res.Attributes = bgColor | fgColor;
+	res.Attributes = (bgColor << 4) | fgColor;
 
 	size_t toDrawLength = toDraw.length();
 	for (size_t i = 0; (i < size) && (i < CONSOLE_WIDTH); ++i) {
@@ -129,7 +129,7 @@ void idConsoleCanvas::DrawMultilineString(const std::string &toDraw, const int x
 // and also puts the right background and foreground color
 CHAR_INFO idConsoleCanvas::GetCharInfoFromDisplayValue(const uint8_t displayValue, const WORD bgColor, const WORD fgColor) const {
 	CHAR_INFO res;
-	res.Attributes = bgColor | fgColor;
+	res.Attributes = (bgColor << 4) | fgColor;
 	if (displayValue > 0 && displayValue <= 8) {
 		res.Attributes |= COMMON_LVB_REVERSE_VIDEO;
 	}
@@ -155,7 +155,7 @@ void idConsoleCanvas::InvertLine(const int x, const int y, const int maxLength) 
 }
 
 void idConsoleCanvas::ClearCanvas(const WORD bgColor, const WORD fgColor) {
-	CHAR_INFO charToDraw = { ' ', WORD(bgColor | fgColor) };
+	CHAR_INFO charToDraw = { ' ', WORD((bgColor << 4) | fgColor) };
 
 	for (size_t i = 0; i < CONSOLE_HEIGHT; ++i) {
 		for (size_t j = 0; j < CONSOLE_WIDTH; ++j) {

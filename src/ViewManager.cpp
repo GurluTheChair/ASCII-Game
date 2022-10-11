@@ -34,11 +34,11 @@ void idViewManager::DrawBottomBar(bool *inputsHeld) {
 	for (int i = 0; i < GAME_LANE_COUNT; i++) {
 		rect.originX = i * LANE_WIDTH;
 		rect.originY = CONSOLE_HEIGHT - 2;
-		canvas.DrawCharRectangle(rect, 0x2584, 0x00F0,
-			(inputsHeld[i]) ? LANE_COLORS_BASE[i] : (BACKGROUND_COLOR << 4));
+		canvas.DrawCharRectangle(rect, 0x2584, TEXT_COLOR,
+			(inputsHeld[i]) ? LANE_COLORS_BASE[i] : BACKGROUND_COLOR);
 		rect.originY = CONSOLE_HEIGHT - 1;
 		canvas.DrawCharRectangle(rect, KeyConstants::LANE_KEYS[i],
-			(inputsHeld[i]) ? (LANE_COLORS_BASE[i] << 4) : (BACKGROUND_COLOR << 4),
+			(inputsHeld[i]) ? LANE_COLORS_BASE[i] : BACKGROUND_COLOR,
 			(inputsHeld[i]) ? TEXT_COLOR : LANE_COLORS_BASE[i]);
 	}
 }
