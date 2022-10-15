@@ -23,6 +23,8 @@ class idViewManager {
 		void DrawConfirmedUI(const size_t index);
 		void ClearUI();
 		void ClearConsole();
+		void DrawResults(const int score, const bool isHighScore, const float accuracy, const int notesHit, const int notesTotal, const int maxCombo, const int missedNotes);
+		void ClearUIBottom();
 	private:
 		idConsoleCanvas &canvas;
 };

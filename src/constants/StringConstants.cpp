@@ -54,7 +54,7 @@ namespace StringConstants {
 	namespace LevelResults {
 		const std::string ACCURACY_TITLE = "ACCURACY";
 		const std::string MAX_COMBO_COUNT_TITLE = "MAX COMBO";
-		const std::string PERFECT_COMBO_SUFFIX = " (PERFECT)";
+		const std::string PERFECT_COMBO_TITLE = "P E R F E C T";
 		const std::string SCORE_TITLE = "SCORE";
 		const std::string NEW_HIGH_SCORE_TITLE = "NEW HIGH SCORE";
 		const std::string EXIT_SCREEN_TITLE =

@@ -1,5 +1,7 @@
 #include <cmath>
 #include <windows.h>
+#include <sstream>
+#include <iomanip>
 
 #include "constants/GameConstants.h"
 #include "constants/ViewConstants.h"
@@ -194,4 +196,43 @@ void idViewManager::ClearUI() {
 
 void idViewManager::ClearConsole() {
 	canvas.ClearCanvas(BACKGROUND_COLOR, BACKGROUND_COLOR);
+}
+
+void idViewManager::DrawResults(const int score, const bool isHighScore, const float accuracy, const int notesHit,
+	const int notesTotal, const int maxCombo, const int missedNotes) {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int TOP_WINDOW_HEIGHT = 5;
+
+	if (missedNotes == 0) {
+		canvas.DrawCenteredString(LevelResults::PERFECT_COMBO_TITLE, UI_X_ORIGIN, TOP_WINDOW_HEIGHT + 4, UI_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+	}
+
+	canvas.DrawCenteredString(LevelResults::ACCURACY_TITLE, UI_X_ORIGIN, TOP_WINDOW_HEIGHT+7, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	std::stringstream accuracyStream;
+	accuracyStream << std::fixed << std::setprecision(2) << (accuracy * 100) << " %";
+	std::string accuracyString = std::to_string(notesHit)+"/"+ std::to_string(notesTotal)+"     "+ accuracyStream.str();
+	canvas.DrawCenteredString(accuracyString, UI_X_ORIGIN, TOP_WINDOW_HEIGHT+9, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	canvas.DrawCenteredString(LevelResults::SCORE_TITLE, UI_X_ORIGIN, TOP_WINDOW_HEIGHT + 13, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(std::to_string(score), UI_X_ORIGIN, TOP_WINDOW_HEIGHT + 15, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	canvas.DrawCenteredString(LevelResults::MAX_COMBO_COUNT_TITLE, UI_X_ORIGIN, TOP_WINDOW_HEIGHT+19, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(std::to_string(maxCombo), UI_X_ORIGIN, TOP_WINDOW_HEIGHT+21, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	if (isHighScore) {
+		canvas.DrawCenteredString(LevelResults::NEW_HIGH_SCORE_TITLE, UI_X_ORIGIN, CONSOLE_HEIGHT - 6, UI_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+	}
+	canvas.DrawCenteredString(LevelResults::EXIT_SCREEN_TITLE, UI_X_ORIGIN, CONSOLE_HEIGHT-3, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+}
+
+void idViewManager::ClearUIBottom() {
+	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+	const int TOP_WINDOW_HEIGHT = 5;
+
+	idConsoleCanvas::rectangle_t rect;
+	rect.originX = UI_X_ORIGIN + 1;
+	rect.width = UI_WIDTH - 2;
+	rect.originY = 1 + TOP_WINDOW_HEIGHT + 1;
+	rect.height = CONSOLE_HEIGHT - 3 - TOP_WINDOW_HEIGHT;
+	canvas.DrawCharRectangle(rect, ' ', BACKGROUND_COLOR, TEXT_COLOR);
 }
