@@ -1,4 +1,4 @@
-#include "InputConstants.h"
+﻿#include "InputConstants.h"
 #include "StringConstants.h"
 
 namespace StringConstants {
@@ -21,15 +21,14 @@ namespace StringConstants {
 	}
 
 	namespace LevelResults {
-		const std::string SCORE_TITLE = "SCORE";
-		const std::string HIGH_SCORE_TITLE = "HIGH_SCORE";
-		const std::string NEW_HIGH_SCORE_TITLE = "HIGH_SCORE (NEW)";
-		const std::string MAX_COMBO_COUNT_TITLE = "MAX COMBO";
 		const std::string ACCURACY_TITLE = "ACCURACY";
+		const std::string MAX_COMBO_COUNT_TITLE = "MAX COMBO";
+		const std::string PERFECT_COMBO_SUFFIX = " (PERFECT)";
+		const std::string SCORE_TITLE = "SCORE";
+		const std::string NEW_HIGH_SCORE_TITLE = "NEW HIGH SCORE";
 		const std::string EXIT_SCREEN_TITLE =
 			std::string("PRESS '") +
 			KeyConstants::AsString::MENU_CONFIRM +
 			std::string("' TO CONTINUE");
 	}
-
 }

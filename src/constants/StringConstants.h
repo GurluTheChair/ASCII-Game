@@ -17,11 +17,11 @@ namespace StringConstants {
 		extern const std::string ACCURACY_TITLE;
 	}
 	namespace LevelResults {
-		extern const std::string SCORE_TITLE;
-		extern const std::string HIGH_SCORE_TITLE;
-		extern const std::string NEW_HIGH_SCORE_TITLE;
-		extern const std::string MAX_COMBO_COUNT_TITLE;
 		extern const std::string ACCURACY_TITLE;
+		extern const std::string MAX_COMBO_COUNT_TITLE;
+		extern const std::string PERFECT_COMBO_SUFFIX;
+		extern const std::string SCORE_TITLE;
+		extern const std::string NEW_HIGH_SCORE_TITLE;
 		extern const std::string EXIT_SCREEN_TITLE;
 	}
 }
