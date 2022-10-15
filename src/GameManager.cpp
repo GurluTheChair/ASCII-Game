@@ -420,8 +420,14 @@ bool idGameManager::UpdateGameView() {
 bool idGameManager::LevelResultsInit() {
 	view.ClearNotesArea();
 	view.ClearUIBottom();
-	view.DrawResults(score.GetScore(), score.IsHighScore(currentLevel.GetSongFilename()), score.GetAccuracy(), score.GetPlayedNotesCount(),
-		score.GetPlayedNotesCount() - score.GetMissedNotesCount(), score.GetMaxComboCount(), score.GetMissedNotesCount());
+	view.DrawResults(
+		score.GetScore(), 
+		score.IsHighScore(levelList[selectedLevelIndex].first), 
+		score.GetAccuracy(), 
+		score.GetPlayedNotesCount() - score.GetMissedNotesCount(),
+		score.GetPlayedNotesCount(),
+		score.GetMaxComboCount(), 
+		score.GetMissedNotesCount());
 	view.Refresh();
 
 	return true;
