@@ -410,18 +410,27 @@ bool idGameManager::UpdateGameView() {
 }
 
 bool idGameManager::LevelResultsInit() {
-	if (score.CheckForHighScore(levelList[selectedLevelIndex].first)) {
-		if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
-			nextStep = gameStep_t::QUIT_ERROR;
-			return false;
-		}
-	}
+	// TODO: init display
 
 	return true;
 }
 
 bool idGameManager::LevelResultsUpdate() {
+	const bool isHighScore = score.IsHighScore(levelList[selectedLevelIndex].first);
 	// TODO: display results and wait for a press
-	nextStep = gameStep_t::LEVEL_SELECT;
-	return true;
+
+	if (input.WasKeyPressed(KeyConstants::MENU_CONFIRM)) {
+		if (isHighScore) {
+			score.UpdateHighScore(levelList[selectedLevelIndex].first);
+			if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
+				nextStep = gameStep_t::QUIT_ERROR;
+				return true;
+			}
+		}
+
+		nextStep = gameStep_t::LEVEL_SELECT;
+		return true;
+	}
+	
+	return false;
 }

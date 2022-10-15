@@ -6,6 +6,7 @@
 
 idScoreManager::idScoreManager()
 : comboCount(0)
+, maxComboCount(0)
 , missedNotesCount(0)
 , playedNotesCount(0)
 , score(0)
@@ -56,6 +57,7 @@ bool idScoreManager::SaveHighScores(const std::string &fileName) const {
 
 void idScoreManager::Reset() {
 	comboCount = 0;
+	maxComboCount = 0;
 	missedNotesCount = 0;
 	playedNotesCount = 0;
 	score = 0;
@@ -66,6 +68,10 @@ void idScoreManager::RegisterHit(const float hitMultiplier) {
 	int value = std::lround(hitMultiplier);
 	score += comboCount * value * GameplaySettingsConstants::SCORE_MULTIPLIER;
 	playedNotesCount++;
+
+	if (comboCount > maxComboCount) {
+		maxComboCount = comboCount;
+	}
 }
 
 void idScoreManager::RegisterMiss() {
@@ -74,14 +80,14 @@ void idScoreManager::RegisterMiss() {
 	playedNotesCount++;
 }
 
-const bool idScoreManager::CheckForHighScore(const std::string &levelFileName) {
-	bool isNewHighScore = (levelHighScores.count(levelFileName) <= 0) || (score > levelHighScores.at(levelFileName));
+const bool idScoreManager::IsHighScore(const std::string& levelFileName) const {
+	return (levelHighScores.count(levelFileName) <= 0) || (score > levelHighScores.at(levelFileName));
+}
 
-	if (isNewHighScore) {
+const void idScoreManager::UpdateHighScore(const std::string &levelFileName) {
+	if (IsHighScore(levelFileName)) {
 		levelHighScores[levelFileName] = score;
 	}
-
-	return isNewHighScore;
 }
 
 const unsigned int idScoreManager::GetHighScore(const std::string &levelFileName) const {
@@ -94,6 +100,10 @@ const unsigned int idScoreManager::GetHighScore(const std::string &levelFileName
 
 const unsigned int idScoreManager::GetComboCount() const {
 	return comboCount;
+}
+
+const unsigned int idScoreManager::GetMaxComboCount() const {
+	return maxComboCount;
 }
 
 const unsigned int idScoreManager::GetMissedNotesCount() const {
@@ -114,4 +124,8 @@ const float idScoreManager::GetAccuracy() const {
 	} else {
 		return float(playedNotesCount - missedNotesCount) / float(playedNotesCount);
 	}
+}
+
+const bool idScoreManager::IsFullCombo() const {
+	return (playedNotesCount == comboCount);
 }
