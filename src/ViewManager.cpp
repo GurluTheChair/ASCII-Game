@@ -147,7 +147,7 @@ void idViewManager::DrawSelectUI(const std::string* levelNames, const size_t siz
 		canvas.DrawString(levelNames[i], UI_LIST_ORIGIN_X, UI_LIST_ORIGIN_Y+i, BACKGROUND_COLOR, TEXT_COLOR);
 	}
 
-	canvas.DrawCenteredString(LevelSelect::INSTRUCTIONS, UI_X_ORIGIN, UI_EXIT_ORIGIN_Y, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawMultilineString(LevelSelect::INSTRUCTIONS, 0, 4, BACKGROUND_COLOR, TEXT_COLOR, true, UI_X_ORIGIN);
 }
 
 void idViewManager::UpdateSelectUI(const size_t index, unsigned int highScore) {

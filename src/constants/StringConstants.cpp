@@ -1,5 +1,39 @@
-﻿#include "InputConstants.h"
+﻿#include <sstream>
+
+#include "GameConstants.h"
+#include "InputConstants.h"
 #include "StringConstants.h"
+
+static std::string GetInstructions() {
+	std::stringstream strStream;
+
+	const std::string sectionSeparator("\n\n\n\n\n");
+
+	// MAIN TITLE
+	strStream << "WELCOME TO <UNTITLED RYTHM GAME>";
+	strStream << sectionSeparator;
+
+	// CHOOSING A SONG
+	strStream << "CHOOSING A SONG\n\n\n";
+	strStream << "Use '" << KeyConstants::AsString::MENU_NEXT << "' and '" << KeyConstants::AsString::MENU_PREVIOUS <<
+	             "'\nto select a song.\n\n";
+	strStream << "Then, press '" << KeyConstants::AsString::MENU_CONFIRM << "' to confirm.";
+	strStream << sectionSeparator;
+
+	// PLAYING THE GAME
+	strStream << "PLAYING THE GAME\n\n\n";
+	strStream << "To play the game, press the\n";
+	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
+		strStream << "'" << KeyConstants::LANE_KEYS[i] << "' ";
+	}
+	strStream << "keys\nwith the correct timing.";
+	strStream << sectionSeparator;
+
+	// EXIT INSTRUCTIONS
+	strStream << "To exit the game press '" << KeyConstants::AsString::APPLICATION_EXIT << "'.";
+
+	return strStream.str();
+}
 
 namespace StringConstants {
 
@@ -7,10 +41,7 @@ namespace StringConstants {
 		const std::string MAIN_TITLE = "SELECT A SONG";
 		const std::string SELECTION_CURSOR = ">";
 		const std::string HIGH_SCORE_TITLE = "HIGH SCORE";
-		const std::string INSTRUCTIONS = // TODO : write actual instructions
-			std::string("PRESS '") + 
-			KeyConstants::AsString::APPLICATION_EXIT +
-			std::string("' TO EXIT GAME");
+		const std::string INSTRUCTIONS = GetInstructions();
 	}
 
 	namespace LevelPlay {
