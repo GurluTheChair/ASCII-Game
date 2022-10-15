@@ -13,8 +13,9 @@ namespace StringConstants {
 	namespace LevelPlay {
 		extern const std::string SCORE_TITLE;
 		extern const std::string COMBO_COUNT_TITLE;
+		extern const std::string FULL_COMBO_SUFFIX;
 		extern const std::string MISSED_NOTES_COUNT_TITLE;
-		extern const std::string ACCURACY_TITLE;
+		extern const std::string HIGH_SCORE_TITLE;
 	}
 	namespace LevelResults {
 		extern const std::string ACCURACY_TITLE;

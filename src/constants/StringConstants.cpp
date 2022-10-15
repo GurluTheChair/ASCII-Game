@@ -47,8 +47,9 @@ namespace StringConstants {
 	namespace LevelPlay {
 		const std::string SCORE_TITLE = "SCORE";
 		const std::string COMBO_COUNT_TITLE = "COMBO";
+		const std::string FULL_COMBO_SUFFIX = " (FULL)";
 		const std::string MISSED_NOTES_COUNT_TITLE = "MISS";
-		const std::string ACCURACY_TITLE = "ACCURACY";
+		const std::string HIGH_SCORE_TITLE = "HIGH SCORE";
 	}
 
 	namespace LevelResults {

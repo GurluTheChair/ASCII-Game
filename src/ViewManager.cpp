@@ -65,7 +65,7 @@ void idViewManager::DrawUIBorder() {
 	canvas.DrawCharVLine(rightVLinesX, 7, CONSOLE_HEIGHT - 8, '|', BACKGROUND_COLOR, TEXT_COLOR);
 }
 
-std::string idViewManager::GetFormatedTime(const int time) {
+std::string idViewManager::GetFormattedTime(const int time) {
 	int minutes = time / 60;
 	int seconds = time % 60;
 	std::string res = "";
@@ -110,28 +110,50 @@ void idViewManager::DrawNote(const idMusicNote &note, const float laneLengthSeco
 
 void idViewManager::DrawUI(const std::string &songName, const int songLength) {
 	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
-	const std::string TIME_STRING = "00:00 / " + GetFormatedTime(songLength);
+	const std::string TIME_STRING = "00:00 / " + GetFormattedTime(songLength);
 	const int INFO_STRING_X = UI_X_ORIGIN + (UI_WIDTH / 6);
 	const int INFO_STRING_LENGTH = 9;
 
-	// Draw the Infos
+	// Draw top info titles
 	canvas.DrawCenteredString(songName, UI_X_ORIGIN, 2, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 	canvas.DrawCenteredString(TIME_STRING, UI_X_ORIGIN, 4, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawStringN(LevelPlay::SCORE_TITLE, INFO_STRING_X, 8, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawStringN(LevelPlay::COMBO_COUNT_TITLE, INFO_STRING_X, 9, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawStringN(LevelPlay::MISSED_NOTES_COUNT_TITLE, INFO_STRING_X, 10, INFO_STRING_LENGTH, BACKGROUND_COLOR, TEXT_COLOR);
+
+	// Draw bottom info titles
+	canvas.DrawCenteredString(LevelPlay::COMBO_COUNT_TITLE, UI_X_ORIGIN, 10, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(LevelPlay::MISSED_NOTES_COUNT_TITLE, UI_X_ORIGIN, 16, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(LevelPlay::SCORE_TITLE, UI_X_ORIGIN, 22, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(LevelPlay::HIGH_SCORE_TITLE, UI_X_ORIGIN, 28, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 }
 
-void idViewManager::UpdateUI(const int timeSinceStart, const int score, const int comboCount, const int missedNotes) {
-	const int UI_X_ORIGIN = CONSOLE_WIDTH - UI_WIDTH;
+void idViewManager::UpdateUI(const int timeSinceStart, const int score, const int comboCount, const bool isFullCombo, const int missedNotes, const int highScore, const bool isNewHighScore) {
+	const int INFO_ORIGIN = CONSOLE_WIDTH - UI_WIDTH + 1;
+	const int INFO_WIDTH = UI_WIDTH - 2;
 	const int TIME_STRING_LENGTH = 13;
-	const int INFO_DATA_X = UI_X_ORIGIN + (UI_WIDTH / 6) + 9;
 
-	//Draw the Infos
-	canvas.DrawString(GetFormatedTime(timeSinceStart), UI_X_ORIGIN + (UI_WIDTH / 2) - (TIME_STRING_LENGTH / 2), 4, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawString(std::to_string(score), INFO_DATA_X, 8, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawString(std::to_string(comboCount)+"     ", INFO_DATA_X, 9, BACKGROUND_COLOR, TEXT_COLOR);
-	canvas.DrawString(std::to_string(missedNotes), INFO_DATA_X, 10, BACKGROUND_COLOR, TEXT_COLOR);
+	// Draw top info
+	canvas.DrawString(GetFormattedTime(timeSinceStart), INFO_ORIGIN + (INFO_WIDTH - TIME_STRING_LENGTH) / 2, 4, BACKGROUND_COLOR, TEXT_COLOR);
+	
+	// Clear previous info
+	canvas.DrawCharHLine(INFO_ORIGIN, INFO_WIDTH, 12, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	canvas.DrawCharHLine(INFO_ORIGIN, INFO_WIDTH, 18, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	canvas.DrawCharHLine(INFO_ORIGIN, INFO_WIDTH, 24, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	canvas.DrawCharHLine(INFO_ORIGIN, INFO_WIDTH, 30, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+
+	// Draw bottom info
+	if (isFullCombo) {
+		canvas.DrawCenteredString(std::to_string(comboCount) + LevelPlay::FULL_COMBO_SUFFIX, INFO_ORIGIN, 12, INFO_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+	} else {
+		canvas.DrawCenteredString(std::to_string(comboCount), INFO_ORIGIN, 12, INFO_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	}
+
+	canvas.DrawCenteredString(std::to_string(missedNotes), INFO_ORIGIN, 18, INFO_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	canvas.DrawCenteredString(std::to_string(score), INFO_ORIGIN, 24, INFO_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	if (isNewHighScore) {
+		canvas.DrawCenteredString(LevelPlay::HIGH_SCORE_TITLE, INFO_ORIGIN, 28, INFO_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+		canvas.DrawCenteredString(std::to_string(score), INFO_ORIGIN, 30, INFO_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+	} else {
+		canvas.DrawCenteredString(std::to_string(highScore), INFO_ORIGIN, 30, INFO_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	}
 }
 
 void idViewManager::DrawSelectUI(const std::string* levelNames, const size_t size) {

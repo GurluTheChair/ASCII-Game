@@ -103,7 +103,7 @@ void idConsoleCanvas::DrawStringN(const std::string &toDraw, const int x, const 
 
 void idConsoleCanvas::DrawCenteredString(const std::string &toDraw, const int x, const int y, const int maxLength, const WORD bgColor, const WORD fgColor) {
 	if (toDraw.length() <= maxLength) {
-		int centeredX = x + (maxLength / 2) - int(toDraw.length() / 2);
+		int centeredX = x + (maxLength - int(toDraw.length())) / 2;
 		DrawString(toDraw, centeredX, y, bgColor,fgColor);
 	} else {
 		DrawString(toDraw.substr(0, maxLength), x, y, bgColor, fgColor);

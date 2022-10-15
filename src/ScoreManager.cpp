@@ -127,5 +127,5 @@ const float idScoreManager::GetAccuracy() const {
 }
 
 const bool idScoreManager::IsFullCombo() const {
-	return (playedNotesCount == comboCount);
+	return (comboCount > 0) && (playedNotesCount == comboCount);
 }

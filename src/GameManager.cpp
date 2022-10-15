@@ -402,7 +402,15 @@ bool idGameManager::UpdateGameView() {
 	view.DrawBottomBar(heldKeys, laneHasRecentMistake);
 
 	// Draw UI
-	view.UpdateUI(int(timeSinceStepStart), score.GetScore(), score.GetComboCount(), score.GetMissedNotesCount());
+	view.UpdateUI(
+		int(timeSinceStepStart),
+		score.GetScore(),
+		score.GetComboCount(),
+		score.IsFullCombo(),
+		score.GetMissedNotesCount(),
+		score.GetHighScore(levelList[selectedLevelIndex].first),
+		score.IsHighScore(levelList[selectedLevelIndex].first)
+	);
 	
 	view.Refresh();
 
