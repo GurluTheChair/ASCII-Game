@@ -22,6 +22,8 @@ typedef unsigned short uint16_t;
 namespace ColorConstants {
 	extern const uint16_t BACKGROUND_COLOR; // Color of the background
 	extern const uint16_t TEXT_COLOR; // Color of text
+	extern const uint16_t GOOD_COLOR; // Color of positive information
+	extern const uint16_t BAD_COLOR; // Color of negative information
 	extern const uint16_t NOTE_COLOR; // Color of active notes
 	extern const uint16_t PRESSED_COLOR; // Color of pressed notes
 	extern const uint16_t MISSED_COLOR; // Color of missed notes

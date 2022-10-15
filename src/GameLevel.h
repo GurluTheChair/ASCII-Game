@@ -10,11 +10,11 @@
 
 class idGameLevel {
 	public:
-		idGameLevel() = default;
+		idGameLevel();
 		
 		bool LoadFile(const std::string &levelFilename);
 		void ActivateNotesForTime(const float time);
-		void RemoveNotesForTime(const float time);
+		void RemoveNotesForTime(const float time, const float tolerance);
 
 		const std::deque<idMusicNote>& GetReadonlyActiveNotes(const unsigned int lane) const;
 		const std::vector<idMusicNote>& GetPlayedNotes() const;

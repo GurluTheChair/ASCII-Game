@@ -12,8 +12,8 @@ class idViewManager {
 		
 		void ClearNotesArea();
 		void Refresh();
-		void DrawNote(const idMusicNote &note, const int lane, const float laneLengthSeconds, const float time);
-		void DrawBottomBar(bool* inputsHeld);
+		void DrawNote(const idMusicNote &note, const float laneLengthSeconds, const float time);
+		void DrawBottomBar(bool* inputsHeld, bool* hasError);
 		void DrawUIBorder();
 		std::string GetFormatedTime(const int time); // TODO: move to proper class
 		void DrawUI(const std::string &songName, const int songLength);

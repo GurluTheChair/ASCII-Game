@@ -26,7 +26,7 @@ void idViewManager::Refresh() {
 	canvas.Refresh();
 }
 
-void idViewManager::DrawBottomBar(bool *inputsHeld) {
+void idViewManager::DrawBottomBar(bool *inputsHeld, bool* hasError) {
 	idConsoleCanvas::rectangle_t rect;
 	rect.height = 1;
 	rect.width = LANE_WIDTH;
@@ -34,7 +34,8 @@ void idViewManager::DrawBottomBar(bool *inputsHeld) {
 	for (int i = 0; i < GAME_LANE_COUNT; i++) {
 		rect.originX = i * LANE_WIDTH;
 		rect.originY = CONSOLE_HEIGHT - 2;
-		canvas.DrawCharRectangle(rect, 0x2584, TEXT_COLOR,
+		canvas.DrawCharRectangle(rect, 0x2584, 
+			(hasError[i]) ? BAD_COLOR : TEXT_COLOR,
 			(inputsHeld[i]) ? LANE_COLORS_BASE[i] : BACKGROUND_COLOR);
 		rect.originY = CONSOLE_HEIGHT - 1;
 		canvas.DrawCharRectangle(rect, KeyConstants::LANE_KEYS[i],
@@ -76,12 +77,12 @@ std::string idViewManager::GetFormatedTime(const int time) {
 	return  res + std::to_string(seconds);
 }
 
-void idViewManager::DrawNote(const idMusicNote &note, const int lane, const float laneLengthSeconds, const float time) {
+void idViewManager::DrawNote(const idMusicNote &note, const float laneLengthSeconds, const float time) {
 	// Compute subpixel rectangle equivalent to note
 	idConsoleCanvas::subpixelRectangle_t rect;
-	const int LANE_HEIGHT = CONSOLE_HEIGHT - 3;
+	const int LANE_HEIGHT = CONSOLE_HEIGHT - 2;
 
-	rect.originX = lane * LANE_WIDTH;
+	rect.originX = note.column * LANE_WIDTH;
 	rect.originY = LANE_HEIGHT * (1 + ((time - note.startSeconds) / laneLengthSeconds));
 	rect.width = LANE_WIDTH;
 	rect.height = LANE_HEIGHT * ((note.endSeconds - note.startSeconds) / laneLengthSeconds);
@@ -93,7 +94,7 @@ void idViewManager::DrawNote(const idMusicNote &note, const int lane, const floa
 			noteColor = NOTE_COLOR;
 			break;
 		case idMusicNote::state_t::PRESSED:
-			noteColor = LANE_COLORS_INTENSIFIED[lane];
+			noteColor = LANE_COLORS_INTENSIFIED[note.column];
 			break;
 		case idMusicNote::state_t::MISSED:
 			noteColor = MISSED_COLOR;

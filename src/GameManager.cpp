@@ -237,6 +237,12 @@ bool idGameManager::SelectLevelUpdate() {
 }
 
 bool idGameManager::PlayLevelInit() {
+	// Load sound effects
+	if (!sound.LoadWav(PathConstants::Audio::Effects::COMBO_BREAK)) {
+		nextStep = gameStep_t::QUIT_ERROR;
+		return false;
+	}
+
 	// Load level
 	std::string levelFilename = PathConstants::GameData::LEVELS_DIR;
 	levelFilename.append(levelList[selectedLevelIndex].first);
@@ -262,17 +268,23 @@ bool idGameManager::PlayLevelInit() {
 
 	// Reset score data
 	score.Reset();
+	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
+		latestLaneMistakes[i] = -2 * GameplaySettingsConstants::NOTE_ERROR_DISPLAY_DURATION;
+	}
 
 	// Draw UI
 	const float songLength = currentLevel.GetLengthSeconds();
 	view.ClearUI();
 	view.DrawUI(currentLevel.GetSongName(), int(songLength));
+	
 	return true;
 }
 
 bool idGameManager::PlayLevelUpdate() {
-	UpdateGameData();
-	UpdateGameView();
+	if (!UpdateGameData() || !UpdateGameView()) {
+		nextStep = gameStep_t::QUIT_ERROR;
+		return true;
+	}
 
 	if (timeSinceStepStart <= currentLevel.GetLengthSeconds()) {
 		return false;
@@ -282,7 +294,7 @@ bool idGameManager::PlayLevelUpdate() {
 	}
 }
 
-void idGameManager::UpdateGameData() {
+bool idGameManager::UpdateGameData() {
 	// # Input Management
 	currentLevel.ActivateNotesForTime(timeSinceStepStart);
 
@@ -291,6 +303,7 @@ void idGameManager::UpdateGameData() {
 	const float releaseEarlyTolerance = GameplaySettingsConstants::EARLY_RELEASE_TOLERANCE_SECONDS;
 	const float maxMissTimeDistance = GameplaySettingsConstants::MAX_MISS_TIME_DISTANCE_SECONDS;
 
+	bool isBigComboLoss = false;
 	for (int i = 0; i < GAME_LANE_COUNT; ++i)
 	{
 		// Get active notes for current lane
@@ -310,40 +323,63 @@ void idGameManager::UpdateGameData() {
 			(bottomNote->state != idMusicNote::state_t::ACTIVE) && 
 			(timeSinceStepStart > bottomNote->endSeconds - releaseEarlyTolerance));
 
-		// Update note state 
+		// Update note state
 		if (bottomNote->state != idMusicNote::state_t::MISSED) {
 			if (bottomNote->state == idMusicNote::state_t::ACTIVE) {
 				if (timeSinceStepStart > bottomNote->startSeconds + pressLateTolerance) {
 					bottomNote->state = idMusicNote::state_t::MISSED;
+					isBigComboLoss |= RegisterMissOnLane(i);
 				} else if (input.WasKeyPressed(KeyConstants::LANE_KEYS[i])) {
 					if (timeSinceStepStart >= bottomNote->startSeconds - pressEarlyTolerance) {
 						bottomNote->state = idMusicNote::state_t::PRESSED;
 					}
 					else if (timeSinceStepStart + maxMissTimeDistance >= bottomNote->startSeconds - pressEarlyTolerance) {
 						bottomNote->state = idMusicNote::state_t::MISSED;
+						isBigComboLoss |= RegisterMissOnLane(i);
 					}
 				}
 			} else if (bottomNote->state == idMusicNote::state_t::PRESSED) {
 				if (input.WasKeyReleased(KeyConstants::LANE_KEYS[i]) &&
 					(timeSinceStepStart <= bottomNote->endSeconds - releaseEarlyTolerance)) {
 					bottomNote->state = idMusicNote::state_t::MISSED;
+					isBigComboLoss |= RegisterMissOnLane(i);
 				}
 			}
 		}
 	}
-
-	currentLevel.RemoveNotesForTime(timeSinceStepStart - pressLateTolerance);
+	currentLevel.RemoveNotesForTime(timeSinceStepStart, pressLateTolerance);
 
 	// # Score Management
 	const std::vector<idMusicNote> &playedNotes = currentLevel.GetPlayedNotes();
 	for (int i = 0; i < playedNotes.size(); ++i) {
+		const unsigned int comboCountBeforeNote = score.GetComboCount();
 		const idMusicNote &note = playedNotes[i];
-		score.RegisterPlayedNote(note);
+		
+		if (note.state == idMusicNote::state_t::PRESSED) {
+			score.RegisterHit((note.endSeconds - note.startSeconds) * 10.0f);
+		} else if (note.state != idMusicNote::state_t::MISSED) { // Missed notes are already registered
+			isBigComboLoss |= RegisterMissOnLane(i);
+		}
 	}
 	currentLevel.ClearPlayedNotes();
+	
+	if (isBigComboLoss && !sound.Play(PathConstants::Audio::Effects::COMBO_BREAK)) {
+		return false;
+	}
+
+	return true;
 }
 
-void idGameManager::UpdateGameView() {
+bool idGameManager::RegisterMissOnLane(const int lane) {
+	const unsigned int comboCountBeforeNote = score.GetComboCount();
+
+	score.RegisterMiss();
+	latestLaneMistakes[lane] = timeSinceStepStart;
+
+	return (comboCountBeforeNote >= GameplaySettingsConstants::BIG_COMBO_LOSS_THRESHOLD);
+}
+
+bool idGameManager::UpdateGameView() {
 	// Draw notes
 	view.ClearNotesArea();
 	const float &laneLengthSeconds = currentLevel.GetLaneLengthSeconds();
@@ -351,21 +387,26 @@ void idGameManager::UpdateGameView() {
 		const std::deque<idMusicNote> &laneNotes = currentLevel.GetReadonlyActiveNotes(lane);
 		for (int i = 0; i < laneNotes.size(); ++i) {
 			const idMusicNote &note = laneNotes[i];
-			view.DrawNote(note, lane, laneLengthSeconds, timeSinceStepStart);
+			view.DrawNote(note, laneLengthSeconds, timeSinceStepStart);
 		}
 	}
 	
 	// Draw bottom bar
 	bool heldKeys[GAME_LANE_COUNT];
+	bool laneHasRecentMistake[GAME_LANE_COUNT];
 	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		heldKeys[i] = input.WasKeyHeld(KeyConstants::LANE_KEYS[i]);
+		laneHasRecentMistake[i] = 
+			((timeSinceStepStart - latestLaneMistakes[i]) <= GameplaySettingsConstants::NOTE_ERROR_DISPLAY_DURATION);
 	}
-	view.DrawBottomBar(heldKeys);
+	view.DrawBottomBar(heldKeys, laneHasRecentMistake);
 
 	// Draw UI
 	view.UpdateUI(int(timeSinceStepStart), score.GetScore(), score.GetComboCount(), score.GetMissedNotesCount());
-
+	
 	view.Refresh();
+
+	return true;
 }
 
 bool idGameManager::LevelResultsInit() {

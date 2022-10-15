@@ -61,17 +61,16 @@ void idScoreManager::Reset() {
 	score = 0;
 }
 
-void idScoreManager::RegisterPlayedNote(const idMusicNote &note) {
-	// TODO: replace 100 with game constant
-	if (note.state == idMusicNote::state_t::PRESSED) {
-		comboCount++;
-		int noteValue = std::lround((note.endSeconds - note.startSeconds) * 10);
-		score += comboCount * noteValue * GameplaySettingsConstants::SCORE_MULTIPLIER;
-	}
-	else {
-		comboCount = 0;
-		missedNotesCount++;
-	}
+void idScoreManager::RegisterHit(const float hitMultiplier) {
+	comboCount++;
+	int value = std::lround(hitMultiplier);
+	score += comboCount * value * GameplaySettingsConstants::SCORE_MULTIPLIER;
+	playedNotesCount++;
+}
+
+void idScoreManager::RegisterMiss() {
+	comboCount = 0;
+	missedNotesCount++;
 	playedNotesCount++;
 }
 

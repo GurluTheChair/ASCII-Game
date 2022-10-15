@@ -5,6 +5,7 @@
 #include <functional>
 #include <vector>
 
+#include "constants/GameConstants.h"
 #include "NYTimer.h"
 #include "GameLevel.h"
 #include "InputManager.h"
@@ -32,6 +33,7 @@ class idGameManager {
 		idViewManager &view;
 		idSoundManager &sound;
 		idScoreManager score;
+		float latestLaneMistakes[GAME_LANE_COUNT];
 
 		std::vector<std::pair<std::string, std::string>> levelList;
 		size_t selectedLevelIndex;
@@ -51,8 +53,9 @@ class idGameManager {
 		bool PlayLevelInit();
 		bool PlayLevelUpdate();
 		// Separate update into two functions for easier code management
-		void UpdateGameData();
-		void UpdateGameView();
+		bool UpdateGameData();
+		bool RegisterMissOnLane(const int lane);
+		bool UpdateGameView();
 
 		bool LevelResultsInit();
 		bool LevelResultsUpdate();

@@ -18,6 +18,7 @@ namespace PathConstants {
 		namespace Effects {
 			const std::string MENU_NAVIGATE = EFFECTS_DIR + "menu_navigate.wav";
 			const std::string MENU_CONFIRM = EFFECTS_DIR + "menu_confirm.wav";
+			const std::string COMBO_BREAK = EFFECTS_DIR + "combo_break.wav";
 		}
 	}
 }

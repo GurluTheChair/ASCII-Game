@@ -156,5 +156,8 @@
     <Media Include="resources\audio\effects\menu_navigate.wav">
       <Filter>Fichiers de ressources\audio\effects</Filter>
     </Media>
+    <Media Include="resources\audio\effects\combo_break.wav">
+      <Filter>Fichiers de ressources\audio\effects</Filter>
+    </Media>
   </ItemGroup>
 </Project>

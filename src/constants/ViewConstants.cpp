@@ -3,6 +3,8 @@
 namespace ColorConstants {
 	const uint16_t BACKGROUND_COLOR = 0x0000;
 	const uint16_t TEXT_COLOR = 0x000F;
+	const uint16_t GOOD_COLOR = 0x000A;
+	const uint16_t BAD_COLOR = 0x0004;
 	const uint16_t NOTE_COLOR = 0x000F;
 	const uint16_t PRESSED_COLOR = 0x000E;
 	const uint16_t MISSED_COLOR = 0x0008;

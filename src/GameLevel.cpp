@@ -15,6 +15,12 @@ static bool LowestEndSeconds(const idMusicNote &left, const idMusicNote &right) 
 	return left.endSeconds < right.endSeconds;
 }
 
+idGameLevel::idGameLevel()
+: songName("")
+, songFilename("")
+, lengthSeconds(0)
+, laneLengthSeconds(0) {}
+
 bool idGameLevel::LoadFile(const std::string &levelFilename) {
 	std::ifstream levelFile(levelFilename);
 
@@ -29,8 +35,9 @@ bool idGameLevel::LoadFile(const std::string &levelFilename) {
 	// Clear previously loaded notes (if any)
 	unplayedNotes.clear();
 	playedNotes.clear();
-	for (int i = 0; i < GAME_LANE_COUNT; ++i)
+	for (int i = 0; i < GAME_LANE_COUNT; ++i) {
 		activeNotes[i].clear();
+	}
 
 	// Load notes data
 	unplayedNotes.reserve(notesCount);
@@ -61,14 +68,22 @@ void idGameLevel::ActivateNotesForTime(const float time) {
 	}
 }
 
-void idGameLevel::RemoveNotesForTime(const float time) {
-	for (int i = 0; i < GAME_LANE_COUNT; i++) {
-		while ((activeNotes[i].size() > 0) && (time > activeNotes[i].front().endSeconds)) {
-			playedNotes.push_back(activeNotes[i].front());
-			activeNotes[i].pop_front();
+void idGameLevel::RemoveNotesForTime(const float time, const float tolerance) {
+	// Remove notes that can't be played anymore
+	for (int lane = 0; lane < GAME_LANE_COUNT; ++lane) {
+		std::deque<idMusicNote> &laneActiveNotes = activeNotes[lane];
+		std::deque<idMusicNote>::iterator i = laneActiveNotes.begin();
+
+		while (i != laneActiveNotes.end()) {
+			if ((time - tolerance > i->endSeconds) || ((i->state == idMusicNote::state_t::PRESSED) && (time > i->endSeconds))) {
+				playedNotes.push_back(*i);
+				i = laneActiveNotes.erase(i);
+			} else {
+				++i;
+			}
 		}
 	}
-
+	// Sort the notes that have been played (= been removed)
 	if (playedNotes.size() > 1) {
 		std::sort(playedNotes.begin(), playedNotes.end(), LowestEndSeconds);
 	}

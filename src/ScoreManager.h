@@ -13,7 +13,8 @@ class idScoreManager {
 		bool LoadHighScores(const std::string &fileName);
 		bool SaveHighScores(const std::string &fileName) const;
 		void Reset();
-		void RegisterPlayedNote(const idMusicNote &note);
+		void RegisterHit(const float hitMultiplier);
+		void RegisterMiss();
 		const bool CheckForHighScore(const std::string &levelFileName);
 		
 		const unsigned int GetHighScore(const std::string &levelFileName) const;
