@@ -81,7 +81,7 @@ void idScoreManager::RegisterMiss() {
 }
 
 const bool idScoreManager::IsHighScore(const std::string& levelFileName) const {
-	return (levelHighScores.count(levelFileName) <= 0) || (score > levelHighScores.at(levelFileName));
+	return (score > GetHighScore(levelFileName));
 }
 
 const void idScoreManager::UpdateHighScore(const std::string &levelFileName) {

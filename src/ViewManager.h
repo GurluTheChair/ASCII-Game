@@ -23,6 +23,7 @@ class idViewManager {
 		void ClearUI();
 		void ClearConsole();
 		void DrawResults(const int score, const bool isHighScore, const float accuracy, const int notesHit, const int notesTotal, const int maxCombo, const int missedNotes);
+		void UpdateResults(const bool doDisplayPrompt);
 		void ClearUIBottom();
 	private:
 		idConsoleCanvas &canvas;

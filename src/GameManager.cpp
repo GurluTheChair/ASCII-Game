@@ -418,6 +418,7 @@ bool idGameManager::UpdateGameView() {
 }
 
 bool idGameManager::LevelResultsInit() {
+	// Draw results
 	view.ClearNotesArea();
 	view.ClearUIBottom();
 	view.DrawResults(
@@ -430,22 +431,24 @@ bool idGameManager::LevelResultsInit() {
 		score.GetMissedNotesCount());
 	view.Refresh();
 
+	// Update high score file if needed
+	if (score.IsHighScore(levelList[selectedLevelIndex].first)) {
+		score.UpdateHighScore(levelList[selectedLevelIndex].first);
+		if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
+			return false;
+		}
+	}
+
 	return true;
 }
 
 bool idGameManager::LevelResultsUpdate() {
-	const bool isHighScore = score.IsHighScore(levelList[selectedLevelIndex].first);
-	// TODO: display results and wait for a press
+	view.UpdateResults(int(timeSinceStepStart) % 2);
+	view.Refresh();
 
+	// Check for input
 	if (input.WasKeyPressed(KeyConstants::MENU_CONFIRM)) {
-		if (isHighScore) {
-			score.UpdateHighScore(levelList[selectedLevelIndex].first);
-			if (!score.SaveHighScores(PathConstants::GameData::LEVEL_HIGH_SCORES)) {
-				nextStep = gameStep_t::QUIT_ERROR;
-				return true;
-			}
-		}
-
+		// TODO : play sound
 		nextStep = gameStep_t::LEVEL_SELECT;
 		return true;
 	}

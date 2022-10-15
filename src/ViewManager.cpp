@@ -242,9 +242,19 @@ void idViewManager::DrawResults(const int score, const bool isHighScore, const f
 	canvas.DrawCenteredString(std::to_string(maxCombo), UI_X_ORIGIN, TOP_WINDOW_HEIGHT+21, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
 
 	if (isHighScore) {
-		canvas.DrawCenteredString(LevelResults::NEW_HIGH_SCORE_TITLE, UI_X_ORIGIN, CONSOLE_HEIGHT - 6, UI_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
+		canvas.DrawCenteredString(LevelResults::NEW_HIGH_SCORE_TITLE, UI_X_ORIGIN, CONSOLE_HEIGHT - 7, UI_WIDTH, BACKGROUND_COLOR, GOOD_COLOR);
 	}
-	canvas.DrawCenteredString(LevelResults::EXIT_SCREEN_TITLE, UI_X_ORIGIN, CONSOLE_HEIGHT-3, UI_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+}
+
+void idViewManager::UpdateResults(const bool doDisplayPrompt) {
+	const int TEXT_ORIGIN = CONSOLE_WIDTH - UI_WIDTH + 1;
+	const int TEXT_MAX_WIDTH = UI_WIDTH - 2;
+
+	if (doDisplayPrompt) {
+		canvas.DrawCenteredString(LevelResults::EXIT_SCREEN_TITLE, TEXT_ORIGIN, CONSOLE_HEIGHT - 4, TEXT_MAX_WIDTH, BACKGROUND_COLOR, TEXT_COLOR);
+	} else {
+		canvas.DrawCharHLine(TEXT_ORIGIN, TEXT_MAX_WIDTH, CONSOLE_HEIGHT - 4, ' ', BACKGROUND_COLOR, BACKGROUND_COLOR);
+	}
 }
 
 void idViewManager::ClearUIBottom() {
