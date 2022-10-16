@@ -12,7 +12,7 @@ class idGameLevel {
 	public:
 		idGameLevel();
 		
-		bool LoadFile(const std::string &levelFilename);
+		bool LoadFile(const std::string &levelFileName);
 		void ActivateNotesForTime(const float time);
 		void RemoveNotesForTime(const float time, const float tolerance);
 
@@ -22,12 +22,12 @@ class idGameLevel {
 		void ClearPlayedNotes();
 
 		const std::string& GetSongName() const;
-		const std::string& GetSongFilename() const;
+		const std::string& GetAudioFileName() const;
 		const float& GetLengthSeconds() const;
 		const float& GetLaneLengthSeconds() const;
 	private:
 		std::string songName;
-		std::string songFilename;
+		std::string audioFileName;
 		float lengthSeconds;
 		float laneLengthSeconds;
 		std::vector<idMusicNote> unplayedNotes;

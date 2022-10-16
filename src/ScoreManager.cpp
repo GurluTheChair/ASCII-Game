@@ -80,7 +80,7 @@ void idScoreManager::RegisterMiss() {
 	playedNotesCount++;
 }
 
-const bool idScoreManager::IsHighScore(const std::string& levelFileName) const {
+const bool idScoreManager::IsHighScore(const std::string &levelFileName) const {
 	return (score > GetHighScore(levelFileName));
 }
 

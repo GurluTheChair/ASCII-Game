@@ -17,16 +17,16 @@ static bool LowestEndSeconds(const idMusicNote &left, const idMusicNote &right) 
 
 idGameLevel::idGameLevel()
 : songName("")
-, songFilename("")
+, audioFileName("")
 , lengthSeconds(0)
 , laneLengthSeconds(0) {}
 
-bool idGameLevel::LoadFile(const std::string &levelFilename) {
-	std::ifstream levelFile(levelFilename);
+bool idGameLevel::LoadFile(const std::string &levelFileName) {
+	std::ifstream levelFile(levelFileName);
 
 	// Load main level data
 	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, songName)
-	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, songFilename)
+	EXTRACT_LINE_WITH_FAIL_RETURN(levelFile, audioFileName)
 	EXTRACT_WITH_FAIL_RETURN(levelFile, lengthSeconds)
 	EXTRACT_WITH_FAIL_RETURN(levelFile, laneLengthSeconds)
 	size_t notesCount;
@@ -109,8 +109,8 @@ const std::string& idGameLevel::GetSongName() const {
 	return songName;
 }
 
-const std::string& idGameLevel::GetSongFilename() const {
-	return songFilename;
+const std::string& idGameLevel::GetAudioFileName() const {
+	return audioFileName;
 }
 
 const float& idGameLevel::GetLengthSeconds() const {

@@ -21,6 +21,7 @@ namespace PathConstants {
 		namespace Effects {
 			extern const std::string MENU_NAVIGATE; // File path for menu navigation sound effect
 			extern const std::string MENU_CONFIRM; // File path for menu confirmation sound effect
+			extern const std::string MENU_BACK; // File path for menu "return" sound effect
 			extern const std::string COMBO_BREAK; // File path for "breaking a combo" sound effect
 		}
 	}

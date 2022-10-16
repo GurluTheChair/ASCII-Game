@@ -244,17 +244,17 @@ bool idGameManager::PlayLevelInit() {
 	}
 
 	// Load level
-	std::string levelFilename = PathConstants::GameData::LEVELS_DIR;
-	levelFilename.append(levelList[selectedLevelIndex].first);
+	std::string levelFileName = PathConstants::GameData::LEVELS_DIR;
+	levelFileName.append(levelList[selectedLevelIndex].first);
 
-	if (!currentLevel.LoadFile(levelFilename)) {
+	if (!currentLevel.LoadFile(levelFileName)) {
 		nextStep = gameStep_t::QUIT_ERROR;
 		return false;
 	}
 
 	// Load level music data and play it
 	std::string songFilePath = PathConstants::Audio::SONGS_DIR;
-	songFilePath.append(currentLevel.GetSongFilename());
+	songFilePath.append(currentLevel.GetAudioFileName());
 
 	if (!sound.LoadWav(songFilePath)) {
 		nextStep = gameStep_t::QUIT_ERROR;
@@ -418,6 +418,20 @@ bool idGameManager::UpdateGameView() {
 }
 
 bool idGameManager::LevelResultsInit() {
+	// Unload level music
+	std::string audioFilePath = PathConstants::Audio::SONGS_DIR;
+	audioFilePath.append(currentLevel.GetAudioFileName());
+	if (!sound.UnloadFile(audioFilePath)) {
+		nextStep = gameStep_t::QUIT_ERROR;
+		return false;
+	}
+
+	// Load sound effect
+	if (!sound.LoadWav(PathConstants::Audio::Effects::MENU_BACK)) {
+		nextStep = gameStep_t::QUIT_ERROR;
+		return false;
+	}
+
 	// Draw results
 	view.ClearNotesArea();
 	view.ClearUIBottom();
@@ -448,7 +462,12 @@ bool idGameManager::LevelResultsUpdate() {
 
 	// Check for input
 	if (input.WasKeyPressed(KeyConstants::MENU_CONFIRM)) {
-		// TODO : play sound
+		// Play sound effect
+		if (!sound.Play(PathConstants::Audio::Effects::MENU_BACK)) {
+			nextStep = gameStep_t::QUIT_ERROR;
+			return false;
+		}
+
 		nextStep = gameStep_t::LEVEL_SELECT;
 		return true;
 	}

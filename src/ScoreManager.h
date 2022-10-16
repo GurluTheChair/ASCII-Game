@@ -15,7 +15,7 @@ class idScoreManager {
 		void Reset();
 		void RegisterHit(const float hitMultiplier);
 		void RegisterMiss();
-		const bool IsHighScore(const std::string& levelFileName) const;
+		const bool IsHighScore(const std::string &levelFileName) const;
 		const void UpdateHighScore(const std::string &levelFileName);
 		
 		const unsigned int GetHighScore(const std::string &levelFileName) const;
