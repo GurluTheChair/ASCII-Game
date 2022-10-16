@@ -41,7 +41,6 @@ class idGameManager {
 
 		NYTimer timer;
 		float timeSinceStepStart;
-		float deltaTime;
 		const float frameRate;
 
 		void PlayGameStep(std::function<bool(void)> stepInitFunc, std::function<bool(void)> stepUpdateFunc);

@@ -15,7 +15,6 @@ idGameManager::idGameManager(idInputManager &_input, idViewManager &_view, idSou
 , sound(_sound)
 , score()
 , frameRate(_frameRate)
-, deltaTime(0.0f)
 , timeSinceStepStart(0.0f)
 , currentLevelId(0)
 , nextStep(gameStep_t::LEVEL_SELECT)
@@ -137,7 +136,6 @@ void idGameManager::PlayGameStep(std::function<bool(void)> stepInitFunc, std::fu
 
 		if (currentLoopTime > (previousUpdateTime + delayBetweenFrames)) {
 			timeSinceStepStart = currentLoopTime - startTime;
-			deltaTime = currentLoopTime - previousUpdateTime;
 
 			shouldStop = stepUpdateFunc();
 			sound.UpdateSourceStates();
