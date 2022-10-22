@@ -1,2 +1,3 @@
 ghost_duet.txt Ghost Duet
 mii_channel.txt Mii Channel Theme
+bakamitai.txt Baka Mitai
